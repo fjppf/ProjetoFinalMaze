@@ -1,0 +1,16 @@
+src/: Esta pasta contém o código-fonte principal do seu projeto.
+    main.py: Este é o ponto de entrada principal do seu programa.
+    controllers/: Esta pasta contém os controladores do seu projeto. Os controladores são responsáveis por coordenar as interações entre a visualização e os modelos.
+        controller.py: Aqui você define as classes e métodos relacionados ao controle do fluxo do programa.
+    models/: Esta pasta contém as classes que representam os modelos de dados do seu projeto.
+        model.py: Aqui você define as classes que representam os objetos do mundo real com os quais você está trabalhando no seu projeto.
+    views/: Esta pasta contém os componentes relacionados à interface do usuário (UI) do seu projeto.
+        view.py: Aqui você define as classes e métodos relacionados à visualização dos dados para o usuário.
+test/: Esta pasta contém os testes unitários para o seu código.
+    test_controller.py: Aqui você escreve os testes para os controladores do seu projeto.
+    test_model.py: Aqui você escreve os testes para os modelos do seu projeto.
+    test_view.py: Aqui você escreve os testes para as visualizações do seu projeto.
+
+Essa é apenas uma estrutura básica e você pode ajustá-la de acordo com as necessidades específicas do seu projeto. Por exemplo, se o seu projeto for 
+rande o suficiente para ter várias partes ou módulos distintos, você pode adicionar pastas adicionais para organizar esses componentes de forma mais 
+granular.
