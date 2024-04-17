@@ -9,6 +9,8 @@ class ControllerManager:
         self.controllers.append(controller)
 
     def run(self):
+        # Limita a taxa de atualização para 200 vezes por segundo
+        self.clock.tick(300)
         running = True
         while running:  
             events = pygame.event.get()  # Obtém todos os eventos
@@ -27,8 +29,7 @@ class ControllerManager:
             # Atualiza a tela uma vez por iteração
             pygame.display.update()
             
-            # Limita a taxa de atualização para 200 vezes por segundo
-            self.clock.tick(300)
+            
             
         pygame.quit()
             
