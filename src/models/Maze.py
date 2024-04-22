@@ -1,28 +1,36 @@
 import random
 from models import Cell
 class Maze:
+    # Class constructor
     def __init__(self):
+        # Class attributes
         self.grid:list = []
         self.rows = 0
         self.cols = 0
         self.start_cell = None
         self.end_cell = None
 
-    def set_grid(self):
-        self.grid = []
-        #aqui começamos o ciclo no 1 porque é para nao começar a desenahr logo no canto superior
+    # Grid attribute getter method
+    def get_grid(self):
+        return self.grid
+    
+    # Grid attribute setter method
+    def set_grid(self,grid:list[list]):
+        self.grid = grid
+
+    # Method that generates the maze grid
+    def generate_grid(self):
+        grid = []
+        # Cycle that will generate the matrix needed for the maze
+        # We start the cycle at 1 so that the amtrix is ​​drawn with clearance from the edge of the window
         for row in range(1,self.rows+1):
             grid_row = []
             for col in range(1,self.cols+1):
                 cell = Cell.Cell(col, row)
                 grid_row.append(cell)
-            self.grid.append(grid_row)
-
-    def get_grid(self)->list[list]:
-        return self.grid
+            grid.append(grid_row)
+        return grid
     
-    def clear_grid(self,screen):
-        screen.fill((255, 255, 255))
         
     def set_rows(self,rows):
         self.rows = rows
@@ -64,7 +72,7 @@ class Maze:
             else:
                 break
             
-            self.set_start_cell(self.get_grid()[0][0])
+            self.set_start_cell(self.get_grid()[random.randint(0, self.get_rows()//2)][random.randint(0,self.get_cols()//2)])
             self.set_end_cell(self.get_grid()[random.randint(self.get_rows()//2, self.get_rows()-1)][random.randint(self.get_cols()//2,self.get_cols()-1)])
         
         

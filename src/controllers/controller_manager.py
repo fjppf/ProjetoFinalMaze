@@ -1,37 +1,38 @@
 import pygame
 import pygame_widgets
 class ControllerManager:
+    # Class constructor
     def __init__(self):
+        # List of controllers that we will manage
         self.controllers = []
+        # Pygame library object to monitor frame rate and manage simulator event timings
         self.clock = pygame.time.Clock()
+        # Limits refresh rate to 300 times per second
+        self.clock.tick(300)
 
+    # Method to add to controller list
     def add_controller(self, controller):
         self.controllers.append(controller)
 
+    # Main function that will manage the entire program
     def run(self):
-        # Limita a taxa de atualização para 200 vezes por segundo
-        self.clock.tick(300)
         running = True
         while running:  
-            events = pygame.event.get()  # Obtém todos os eventos
+            events = pygame.event.get()  # Get all events
             for event in events:
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT: # User clicks the window close button
                     running = False
-                    break  # Sair do loop se for para fechar a janela
+                    break  
             
-            # Atualiza a interface do usuário para todos os controladores
+            # Updates the UI for all controllers
             for controller in self.controllers:
                 controller.update_ui()
                 
-            # Atualiza os widgets do Pygame
-            pygame_widgets.update(events)
+            pygame_widgets.update(events) # Update Pygame widgets
             
-            # Atualiza a tela uma vez por iteração
-            pygame.display.update()
+            pygame.display.update() # Update the screen once per iteration
             
-            
-            
-        pygame.quit()
+        pygame.quit() # Closes the program and all processes
             
 
 
