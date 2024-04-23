@@ -10,7 +10,7 @@ class Cell:
         self.walls = {"top": True, "right": True, "bottom": True, "left": True}#paredes
         self.visited = False#estado se o quadrado foi visitado
 
-    #region getters and setters
+    
     def get_x(self):
         return self.x
     def set_x(self,x):
@@ -20,7 +20,14 @@ class Cell:
         return self.y
     def set_y(self,y):
         self.y = y
-    #endregion
+    
+    #falta o get/set do  atributo walls
+    
+    def get_visited(self):
+        return self.visited
+    def set_visited(self,visited):
+        self.visited = visited
+
 
     def draw_cell(self,screen,color):
         x = self.get_x() * self.size #coordenada x * tamanho do quadrado
@@ -59,7 +66,7 @@ class Cell:
             neighbors.append(top)
         if right and not right.visited:
             neighbors.append(right)
-        if bottom and not bottom.visited:
+        if bottom and not bottom.visited: ############## usar o get_visited de cada celula nao aceder diretamente ao atributo
             neighbors.append(bottom)
         if left and not left.visited:
             neighbors.append(left)

@@ -7,9 +7,9 @@ from controllers import controller_manager,view_controller
 def main():
     pygame.init()
     # Creating the view controller instance
-    viewController = view_controller.ViewController()
+    viewController:view_controller = view_controller.ViewController()
     # creating the manager controller instance
-    manager = controller_manager.ControllerManager()
+    manager:controller_manager = controller_manager.ControllerManager()
     # Add the controllers we want it to run to the controller manager
     manager.add_controller(viewController)
     # Run the method called "run" from controller_manager which will make it the main function of the program

@@ -5,15 +5,14 @@ class Maze:
     def __init__(self):
         # Class attributes
         self.grid:list = []
-        self.rows = 0
-        self.cols = 0
-        self.start_cell = None
-        self.end_cell = None
+        self.rows:int = 0
+        self.cols:int = 0
+        self.start_cell:Cell = None
+        self.end_cell:Cell = None
 
     # Grid attribute getter method
     def get_grid(self):
         return self.grid
-    
     # Grid attribute setter method
     def set_grid(self,grid:list[list]):
         self.grid = grid
@@ -31,39 +30,43 @@ class Maze:
             grid.append(grid_row)
         return grid
     
-        
-    def set_rows(self,rows):
-        self.rows = rows
-        
+    # Rows attribute getter method
     def get_rows(self):
         return self.rows
-    
-    def set_cols(self,cols):
-        self.cols = cols
+    # Rows attribute setter method
+    def set_rows(self,rows:int):
+        self.rows = rows
         
+    # Cols attribute getter method
     def get_cols(self):
         return self.cols
+    # Cols attribute setter method  
+    def set_cols(self,cols:int):
+        self.cols = cols
     
-    def set_start_cell(self,cell:Cell):
-        self.start_cell = cell
-        
+    # start_cell attribute getter method
     def get_start_cell(self):
         return self.start_cell
+    # start_cell attribute setter method
+    def set_start_cell(self,cell:Cell):
+        self.start_cell = cell
     
-    def set_end_cell(self,cell:Cell):
-        self.end_cell = cell
-        
+    # end_cell attribute getter method
     def get_end_cell(self):
         return self.end_cell
+    # end_cell attribute setter method
+    def set_end_cell(self,cell:Cell):
+        self.end_cell = cell
     
+    # Method that will generate the maze itself
     def generate_maze(self):
-        current_cell = self.get_grid()[0][0]
-        stack = []
+        current_cell:Cell = self.get_grid()[0][0]
+        stack:list = []
         while True:
-            current_cell.visited = True
-            next_cell = current_cell.check_neighbors(self.get_grid())
+            current_cell.set_visited(True)
+            next_cell:Cell = current_cell.check_neighbors(self.get_grid()) ####### MISS COMENTS HERE ####################
             if next_cell: 
-                next_cell.visited = True
+                next_cell.set_visited(True)
                 stack.append(current_cell)
                 current_cell.remove_walls(next_cell)
                 current_cell = next_cell      
@@ -72,10 +75,17 @@ class Maze:
             else:
                 break
             
+            # Assign a random starting house in the 1st quadrant of the maze
             self.set_start_cell(self.get_grid()[random.randint(0, self.get_rows()//2)][random.randint(0,self.get_cols()//2)])
+            # Assign a random final house in the 4th quadrant of the maze
             self.set_end_cell(self.get_grid()[random.randint(self.get_rows()//2, self.get_rows()-1)][random.randint(self.get_cols()//2,self.get_cols()-1)])
         
+        # Clear all visited attributes of each maze cell for future use in the search for resolution ############### verificar
+        temp_grid:list[list] = self.get_grid() # Temporary variable to store the current grid
+        for row in range(0,self.rows):            
+            for col in range(0,self.cols):
+                temp_grid[row][col].set_visited(False)
+        self.set_grid(temp_grid)
+        del temp_grid # Free memory by deleting temporary variable
         
         return self
-    
-# o algoritmo do Francis a mostra o labirinto a ser criado tem de estar aqui ou pode mostrar as versoes antigas
