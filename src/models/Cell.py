@@ -4,11 +4,11 @@ import pygame
 class Cell:
 
     def __init__(self,x,y):
-        self.x = x #cordenada x
-        self.y = y #cordenada y
-        self.size = 20 #tamanho da celula
-        self.walls = {"top": True, "right": True, "bottom": True, "left": True}#paredes
-        self.visited = False#estado se o quadrado foi visitado
+        self.x:int = x # Coordinate x
+        self.y:int = y # Coordinate y
+        self.size:int = 20 # Cell size
+        self.walls:dict = {"top": True, "right": True, "bottom": True, "left": True} # Walls
+        self.visited:bool = False # Cell status check variable
 
     
     def get_x(self):
@@ -20,8 +20,16 @@ class Cell:
         return self.y
     def set_y(self,y):
         self.y = y
+        
+    def get_size(self):
+        return self.size
+    def set_size(self,size):
+        self.size = size
     
-    #falta o get/set do  atributo walls
+    def get_wall(self,direction):
+        return self.walls[direction]
+    def set_wall(self,direction,value):
+        self.walls[direction] = value
     
     def get_visited(self):
         return self.visited
@@ -30,24 +38,27 @@ class Cell:
 
 
     def draw_cell(self,screen,color):
-        x = self.get_x() * self.size #coordenada x * tamanho do quadrado
-        y = self.get_y() * self.size#coordenada y * tamanho do quadrado
-        pygame.draw.rect(screen, pygame.Color(color),(x,y,self.size, self.size))# (x-coordinate of the top-left corner,y-coordinate of the top-left corner,widht, heght)
+        x:int = self.get_x() * self.get_size() # Stores the x coordinate of the cell on the screen
+        y:int = self.get_y() * self.get_size() # Stores the y coordinate of the cell on the screen
+        
+        # Drawing the cell on the screen
+        pygame.draw.rect(screen, pygame.Color(color),(x,y,self.get_size(), self.get_size())) # (x-coordinate of the top-left corner,y-coordinate of the top-left corner,widht, heght)
 
     def draw(self, screen): #desenhar a grid
-        x = self.get_x() *self.size
-        y = self.get_y() *self.size
+        x:int = self.get_x() * self.get_size() # Stores the x coordinate of the cell on the screen
+        y:int = self.get_y() * self.get_size() # Stores the y coordinate of the cell on the screen
         
-        pygame.draw.rect(screen, pygame.Color("black"),(x,y,self.size, self.size))# (x-coordinate of the top-left corner,y-coordinate of the top-left corner,widht, heght)
+        # Drawing the cell on the screen
+        pygame.draw.rect(screen, pygame.Color("black"),(x,y,self.get_size(), self.get_size()))# (x-coordinate of the top-left corner,y-coordinate of the top-left corner,widht, heght)
 
-        if self.walls['top']:#desenhar as paredes do topo do quadrado 
-            pygame.draw.line(screen, pygame.Color('darkorange'), (x, y), (x + self.size, y)) #line(surface, color, start_pos, end_pos)
-        if self.walls['right']:#desenhar as paredes da direita do quadrado 
-            pygame.draw.line(screen, pygame.Color('darkorange'), (x + self.size, y), (x + self.size, y + self.size))
-        if self.walls['bottom']:#desenhar as paredes de baixo do quadrado 
-            pygame.draw.line(screen, pygame.Color('darkorange'), (x + self.size, y + self.size), (x , y + self.size))
-        if self.walls['left']:#desenhar as paredes da esquerda do quadrado 
-            pygame.draw.line(screen, pygame.Color('darkorange'), (x, y + self.size), (x, y))
+        if self.get_wall('top'):#desenhar as paredes do topo do quadrado 
+            pygame.draw.line(screen, pygame.Color('darkorange'), (x, y), (x + self.get_size(), y)) #line(surface, color, start_pos, end_pos)
+        if self.get_wall('right'):#desenhar as paredes da direita do quadrado 
+            pygame.draw.line(screen, pygame.Color('darkorange'), (x + self.get_size(), y), (x + self.get_size(), y + self.get_size()))
+        if self.get_wall('bottom'):#desenhar as paredes de baixo do quadrado 
+            pygame.draw.line(screen, pygame.Color('darkorange'), (x + self.get_size(), y + self.get_size()), (x , y + self.get_size()))
+        if self.get_wall('left'):#desenhar as paredes da esquerda do quadrado 
+            pygame.draw.line(screen, pygame.Color('darkorange'), (x, y + self.get_size()), (x, y))
 
     def check_cell(self, x, y,grid):#ver qual é o quadrado que esta no momento
         for row in grid:
@@ -73,17 +84,17 @@ class Cell:
         return choice(neighbors) if neighbors else False
     
     def remove_walls(self, next):
-        dx = self.x - next.x
+        dx:int = self.x - next.x
         if dx == 1:
-            self.walls['left'] = False
-            next.walls['right'] = False
+            self.set_wall('left',False)
+            next.set_wall('right',False)
         elif dx == -1:
-            self.walls['right'] = False
-            next.walls['left'] = False
-        dy = self.y - next.y
+            self.set_wall('right',False)
+            next.set_wall('left',False)
+        dy:int = self.y - next.y
         if dy == 1:
-            self.walls['top'] = False
-            next.walls['bottom'] = False
+            self.set_wall('top',False)
+            next.set_wall('bottom',False)
         elif dy == -1:
-            self.walls['bottom'] = False
-            next.walls['top'] = False
+            self.set_wall('bottom',False)
+            next.set_wall('top',False)
