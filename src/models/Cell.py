@@ -2,7 +2,7 @@ from random import choice
 import pygame 
 
 class Cell:
-
+    
     def __init__(self,x,y):
         self.x:int = x # Coordinate x
         self.y:int = y # Coordinate y
