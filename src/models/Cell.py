@@ -69,20 +69,29 @@ class Cell:
 
     def check_neighbors(self,grid):
         neighbors = []
+        # Check the top neighbor
         top = self.check_cell(self.get_x(), self.get_y()-1,grid)
+        # Check the right neighbor
         right = self.check_cell(self.get_x() + 1, self.get_y(),grid)
+        # Check the bottom neighbor
         bottom = self.check_cell(self.get_x(), self.get_y() + 1,grid)
+        # Check the left neighbor
         left = self.check_cell(self.get_x() - 1, self.get_y(),grid)
+
+        #if there is a cell on top/right/bottom/left of the current cell, 
+        #and that cell(top/right/bottom/left) it's not visited gets added to the list
+
         if top and not top.visited:
             neighbors.append(top)
         if right and not right.visited:
             neighbors.append(right)
-        if bottom and not bottom.visited: ############## usar o get_visited de cada celula nao aceder diretamente ao atributo
+        if bottom and not bottom.visited: 
             neighbors.append(bottom)
-        if left and not left.visited:
+        if left and not left.visited: 
             neighbors.append(left)
-        return choice(neighbors) if neighbors else False
+        return choice(neighbors) if neighbors else False 
     
+    #if the list is empty return a flase value
     def remove_walls(self, next):
         dx:int = self.x - next.x
         if dx == 1:
