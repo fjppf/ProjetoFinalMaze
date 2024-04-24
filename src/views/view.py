@@ -42,18 +42,35 @@ class view:
     
         pygame_widgets.update(events)
         pygame.display.update()#updates the display
+        
+    def draw_cell(self,cell, bg_color, wl_color): #desenhar a grid
+        x:int = cell.get_x() * cell.get_size() # Stores the x coordinate of the cell on the screen
+        y:int = cell.get_y() * cell.get_size() # Stores the y coordinate of the cell on the screen
+        
+        # Drawing the cell on the screen
+        pygame.draw.rect(self.screen, pygame.Color(bg_color),(x,y,cell.get_size(), cell.get_size()))
 
+        # The following code checks which walls the cell is supposed to have by checking the walls attribute 
+        # of the respective cell and, if so, draw it on the screen using pygame.draw.line
+        if cell.get_wall('top'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y), (x + cell.get_size(), y)) #line(surface, color, start_pos, end_pos)
+        if cell.get_wall('right'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y), (x + cell.get_size(), y + cell.get_size()))
+        if cell.get_wall('bottom'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y + cell.get_size()), (x , y + cell.get_size()))
+        if cell.get_wall('left'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y + cell.get_size()), (x, y))
+            
     def draw_maze(self):
         #verificação do tamanho das colunas e linhas
         self.screen.fill((255, 255, 255))
         self.maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
         for row in self.maze.get_grid():
             for cell in row:
-                cell.draw(self.screen)
-        self.maze.get_start_cell().draw_cell(self.screen,"green")
-        self.maze.get_end_cell().draw_cell(self.screen,"red")
+                self.draw_cell(cell,"black","darkorange")
+        self.draw_cell(self.maze.get_start_cell(),"green","darkorange")
+        self.draw_cell(self.maze.get_end_cell(),"red","darkorange")
 
-        end_cell = self.maze.get_end_cell()
         pygame.display.update()
     
     def draw_labels(self,text,font, color, x, y):
@@ -63,14 +80,6 @@ class view:
     def draw_titles(self,text,font, color, x, y):
         text_surface = font.render(text, True, color)
         self.screen.blit(text_surface,(x,y))
-
-    def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.view_controller.generate_maze()
 
     def clear_grid(self):
         print("hello")

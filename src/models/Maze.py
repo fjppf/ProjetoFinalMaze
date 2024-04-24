@@ -10,10 +10,9 @@ class Maze:
         self.start_cell:Cell = None
         self.end_cell:Cell = None
 
-    # Grid attribute getter method
+    # Grid attribute getter and setter methods
     def get_grid(self):
         return self.grid
-    # Grid attribute setter method
     def set_grid(self,grid:list[list]):
         self.grid = grid
 
@@ -30,31 +29,27 @@ class Maze:
             grid.append(grid_row)
         return grid
     
-    # Rows attribute getter method
+    # Rows attribute getter and setter methods
     def get_rows(self):
         return self.rows
-    # Rows attribute setter method
     def set_rows(self,rows:int):
         self.rows = rows
         
-    # Cols attribute getter method
+    # Cols attribute getter and setter methods
     def get_cols(self):
         return self.cols
-    # Cols attribute setter method  
     def set_cols(self,cols:int):
         self.cols = cols
     
-    # start_cell attribute getter method
+    # start_cell attribute getter and setter methods
     def get_start_cell(self):
         return self.start_cell
-    # start_cell attribute setter method
     def set_start_cell(self,cell:Cell):
         self.start_cell = cell
     
-    # end_cell attribute getter method
+    # end_cell attribute getter and setter methods
     def get_end_cell(self):
         return self.end_cell
-    # end_cell attribute setter method
     def set_end_cell(self,cell:Cell)-> None:
         self.end_cell = cell
     

@@ -4,7 +4,7 @@
 import pygame
 from controllers import controller_manager,view_controller
 
-def main():
+def main() -> None:
     pygame.init()
     # Creating the view controller instance
     viewController:view_controller = view_controller.ViewController()
