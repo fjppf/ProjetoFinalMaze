@@ -55,25 +55,27 @@ class Maze:
     def get_end_cell(self):
         return self.end_cell
     # end_cell attribute setter method
-    def set_end_cell(self,cell:Cell):
+    def set_end_cell(self,cell:Cell)-> None:
         self.end_cell = cell
     
     # Method that will generate the maze itself
     def generate_maze(self):
         current_cell:Cell = self.get_grid()[0][0]
+        # Empty stack where all the cells that are going to be visited will be added
         stack:list = []
+        # Loop until there are no more unvisited cells
         while True:
-            current_cell.set_visited(True)
-            next_cell:Cell = current_cell.check_neighbors(self.get_grid()) ####### MISS COMENTS HERE ####################
-            if next_cell: 
-                next_cell.set_visited(True)
-                stack.append(current_cell)
-                current_cell.remove_walls(next_cell)
-                current_cell = next_cell      
-            elif stack:
-                current_cell = stack.pop()   
+            current_cell.set_visited(True) # Mark the current cell as visited
+            next_cell:Cell = current_cell.check_neighbors(self.get_grid()) # Get the next unvisited neighbor
+            if next_cell: # If there is an unvisited neighbor
+                next_cell.set_visited(True) # Mark the next cell as visited
+                stack.append(current_cell) # Add the current cell to the stack
+                current_cell.remove_walls(next_cell) # Remove the walls between the current and next cell
+                current_cell = next_cell  # Move to the next cell
+            elif stack: # If the stack is not empty
+                current_cell = stack.pop() # Move back to the previous cell
             else:
-                break
+                break # Exit the loop when there are no more unvisited cells
             
             # Assign a random starting house in the 1st quadrant of the maze
             self.set_start_cell(self.get_grid()[random.randint(0, self.get_rows()//2)][random.randint(0,self.get_cols()//2)])
