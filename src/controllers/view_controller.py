@@ -16,6 +16,3 @@ class ViewController:
             if event.type == pygame.QUIT:
                 return True
         return False
-    
-    def update_ui(self):
-        self.view.update_ui()

@@ -23,10 +23,6 @@ class ControllerManager:
                 if event.type == pygame.QUIT: # User clicks the window close button
                     running = False
                     break  
-            
-            # Updates the UI for all controllers
-            for controller in self.controllers:
-                controller.update_ui()
                 
             pygame_widgets.update(events) # Update Pygame widgets
             
