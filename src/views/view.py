@@ -18,10 +18,12 @@ class view:
         self.text_font:pygame.font= pygame.font.SysFont("Arial",20)
         self.title_font:pygame.font = pygame.font.SysFont("Arial Black",30)
         self.color_black:tuple=(0, 0, 0)
-        self.draw_titles("Create Maze", self.title_font,self.color_black,self.screen_width-286.5,17)
-        self.draw_labels("Number of columns:", self.text_font,self.color_black,self.screen_width-370,75)
-        self.draw_labels("Number of rows:", self.text_font,self.color_black,self.screen_width-343,120)
-        self.draw_titles("Options", self.title_font,self.color_black,1000,430)
+        self.draw_labels("Create Maze", self.title_font,self.color_black,self.screen_width-286.5,17)
+        self.draw_labels("Number of columns :", self.text_font,self.color_black,self.screen_width-370,75)
+        self.draw_labels("Number of rows :", self.text_font,self.color_black,self.screen_width-343,120)
+        self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
+        self.draw_labels("Background color :", self.text_font,self.color_black,self.screen_width-343,400)
+        self.draw_labels("Options", self.title_font,self.color_black,1000,430)
 
         self.txtNumbCols = TextBox(self.screen, self.screen_width-212, 70, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 200, 0))
         self.txtNumbRowss = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 200, 0))
@@ -79,21 +81,10 @@ class view:
 
         pygame.display.update()
         
-        
-    
     def draw_labels(self,text,font, color, x, y):
         text_surface = font.render(text, True, color)
-        self.screen.blit(text_surface,(x,y))
-
-    def draw_titles(self,text,font, color, x, y):
-        text_surface = font.render(text, True, color)
-        print("hola")
+        print(text_surface.get_size())
         self.screen.blit(text_surface,(x,y))
 
     def clear_grid(self):
         print("hello")
-
-        
-
-    
-    
