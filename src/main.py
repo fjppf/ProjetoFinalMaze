@@ -2,16 +2,17 @@
 # "pip install -r requirements.txt"
 
 import pygame
-from controllers import controller_manager,view_controller
+from controllers.controller_manager import ControllerManager
+from controllers.view_controller import ViewController
 
 def main() -> None:
     pygame.init()
     # Creating the view controller instance
-    viewController:view_controller = view_controller.ViewController()
+    view_controller:ViewController = ViewController()
     # creating the manager controller instance
-    manager:controller_manager = controller_manager.ControllerManager()
+    manager:ControllerManager = ControllerManager()
     # Add the controllers we want it to run to the controller manager
-    manager.add_controller(viewController)
+    manager.add_controller(view_controller)
     # Run the method called "run" from controller_manager which will make it the main function of the program
     manager.run()
 

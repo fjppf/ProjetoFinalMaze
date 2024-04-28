@@ -3,7 +3,7 @@ import pygame_gui
 import pygame_gui.ui_manager
 from pygame_widgets.button import Button
 from pygame_widgets.textbox import TextBox
-from pygame_gui.windows import UIColourPickerDialog
+from views.picker_view import picker_view
 import pygame_widgets
 class view:
     def __init__(self,controller):
@@ -15,7 +15,7 @@ class view:
         # Definir a tela como fullscreen com a resolução obtida
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height-55))
         self.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
-    
+        self.pickerView = picker_view(self.screen,self.ui_manager)
         self.screen.fill((255, 255, 255))
         pygame.display.set_caption("Maze Simulator")
         
@@ -78,12 +78,14 @@ class view:
         pygame.display.update()#updates the display
     
     def pick_color_btn_wls_click(self):
-        self.current_color_wls = self.colour_picker(self.ui_manager,self.current_color_wls)
+        self.current_color_wls = self.pickerView.color_picker(self.current_color_wls)
         self.rect_wls = pygame.draw.rect(self.screen, self.current_color_wls, (self.screen_width-57, 165, 35, 35))
+        self.clear_grid()
     
     def pick_color_btn_bg_click(self):
-        self.current_color_bg = self.colour_picker(self.ui_manager,self.current_color_bg)
+        self.current_color_bg = self.pickerView.color_picker(self.current_color_bg)
         self.rect_bg = pygame.draw.rect(self.screen, self.current_color_bg, (self.screen_width-57, 215, 35, 35))
+        self.clear_grid()
 
     
     def create_btn_click(self):
@@ -142,28 +144,7 @@ class view:
     def clear_grid(self):
         self.screen.fill((255,255,255),pygame.Rect(0, 0, self.screen_width-370, self.screen_height))
 
-    def colour_picker(self, ui_manager, current_colour):
-        colour_picker = UIColourPickerDialog(pygame.Rect(160, 50, 420, 400), ui_manager, window_title="Pick color", initial_colour=current_colour)
-        colour_picker.show()
-        run = True
-        while run:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if colour_picker.ok_button.rect.collidepoint(event.pos):  # Clicou no botão OK
-                        run = False
-                    elif colour_picker.cancel_button.rect.collidepoint(event.pos):  # Clicou no botão de cancelar
-                        run = False
-                    elif colour_picker.close_window_button.rect.collidepoint(event.pos):
-                        run = False       
-                ui_manager.process_events(event)
-
-            ui_manager.update(0)  # Atualizar a interface gráfica
-            ui_manager.draw_ui(self.screen)  # Desenhar elementos da interface gráfica na tela
-            pygame.display.flip()  # Atualizar a tela
-            
-        colour_picker.kill()
-        self.clear_grid()
-        return colour_picker.get_colour()
+    
 
 
 

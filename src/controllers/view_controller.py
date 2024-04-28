@@ -1,18 +1,14 @@
-import pygame
-from controllers import maze_controller
-from views import view
+from controllers.maze_controller import maze_controller
+from views.view import view
 class ViewController:
-    def __init__(self):
-        self.maze_controller = maze_controller.maze_controller()
-        self.view = view.view(self)
+    # ViewController class constructor
+    def __init__(self) -> None:
+        self.maze_controller:maze_controller = maze_controller() # Maze controller
+        self.view:view = view(self) # User Interface do utilizador
 
-    def generate_maze(self,rows:int,cols:int):
-        self.maze_controller.set_grid(rows,cols)
-        self.maze = self.maze_controller.generate_maze()
+    # Method that contacts the maze controller to tell it to generate the maze
+    def generate_maze(self,rows:int,cols:int) -> 'Maze': 
+        self.maze_controller.set_grid(rows,cols) # Method that creates the grid
+        self.maze:'Maze' = self.maze_controller.generate_maze() # Method that creates the maze in the grid created above
         return self.maze
-        
-    def should_quit(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return True
-        return False
+
