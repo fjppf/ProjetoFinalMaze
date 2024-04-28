@@ -1,5 +1,6 @@
 import pygame
 import pygame_widgets
+import pygame_gui
 class ControllerManager:
     # Class constructor
     def __init__(self):
@@ -23,10 +24,11 @@ class ControllerManager:
                 if event.type == pygame.QUIT: # User clicks the window close button
                     running = False
                     break  
+                if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    pygame.display.flip()
                 
             pygame_widgets.update(events) # Update Pygame widgets
-            
-            pygame.display.update() # Update the screen once per iteration
+            pygame.display.flip() # Update the screen once per iteration
             
         pygame.quit() # Closes the program and all processes
             
