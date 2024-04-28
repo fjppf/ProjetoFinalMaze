@@ -1,60 +1,60 @@
 import random
-from models import Cell
+from models.Cell import Cell
 class Maze:
     # Class constructor
-    def __init__(self):
+    def __init__(self) -> None:
         # Class attributes
-        self.grid:list = []
+        self.grid:list[list] = None
         self.rows:int = 0
         self.cols:int = 0
         self.start_cell:Cell = None
         self.end_cell:Cell = None
 
     # Grid attribute getter and setter methods
-    def get_grid(self):
+    def get_grid(self) -> list[list]:
         return self.grid
-    def set_grid(self,grid:list[list]):
+    def set_grid(self,grid:list[list]) -> None:
         self.grid = grid
 
     # Method that generates the maze grid
-    def generate_grid(self):
-        grid = []
+    def generate_grid(self) -> list[list]:
+        grid:list[list] = []
         # Cycle that will generate the matrix needed for the maze
         # We start the cycle at 1 so that the amtrix is ​​drawn with clearance from the edge of the window
         for row in range(1,self.rows+1):
-            grid_row = []
+            grid_row:list = []
             for col in range(1,self.cols+1):
-                cell = Cell.Cell(col, row)
+                cell:Cell = Cell(col, row)
                 grid_row.append(cell)
             grid.append(grid_row)
         return grid
     
     # Rows attribute getter and setter methods
-    def get_rows(self):
+    def get_rows(self) -> int:
         return self.rows
-    def set_rows(self,rows:int):
+    def set_rows(self,rows:int) -> None:
         self.rows = rows
         
     # Cols attribute getter and setter methods
-    def get_cols(self):
+    def get_cols(self) -> int:
         return self.cols
-    def set_cols(self,cols:int):
+    def set_cols(self,cols:int) -> None:
         self.cols = cols
     
     # start_cell attribute getter and setter methods
-    def get_start_cell(self):
+    def get_start_cell(self) -> Cell:
         return self.start_cell
-    def set_start_cell(self,cell:Cell):
+    def set_start_cell(self,cell:Cell) -> None:
         self.start_cell = cell
     
     # end_cell attribute getter and setter methods
-    def get_end_cell(self):
+    def get_end_cell(self) -> Cell:
         return self.end_cell
-    def set_end_cell(self,cell:Cell)-> None:
+    def set_end_cell(self,cell:Cell) -> None:
         self.end_cell = cell
     
     # Method that will generate the maze itself
-    def generate_maze(self):
+    def generate_maze(self) -> 'Maze':
         current_cell:Cell = self.get_grid()[0][0]
         # Empty stack where all the cells that are going to be visited will be added
         stack:list = []

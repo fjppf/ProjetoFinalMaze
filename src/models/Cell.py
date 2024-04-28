@@ -1,9 +1,8 @@
 from random import choice
-import pygame 
-
+from typing import Union
 class Cell:
     # Class constructor
-    def __init__(self,x,y):
+    def __init__(self,x,y) -> None:
         # Class attributes
         self.x:int = x 
         self.y:int = y 
@@ -12,55 +11,56 @@ class Cell:
         self.visited:bool = False 
 
     # x attribute getter and setter methods
-    def get_x(self):
+    def get_x(self) -> int:
         return self.x
-    def set_x(self,x):
+    def set_x(self,x:int) -> None:
         self.x = x
 
     # y attribute getter and setter methods
-    def get_y(self):
+    def get_y(self) -> int:
         return self.y
-    def set_y(self,y):
+    def set_y(self,y:int) -> None:
         self.y = y
     
     # size attribute getter and setter methods
-    def get_size(self):
+    def get_size(self) -> int:
         return self.size
-    def set_size(self,size):
+    def set_size(self,size:int) -> None:
         self.size = size
     
     # walls attribute getter and setter methods
-    def get_wall(self,direction):
+    def get_wall(self,direction:str) -> str:
         return self.walls[direction]
-    def set_wall(self,direction,value):
+    def set_wall(self,direction:str,value:bool) -> None:
         self.walls[direction] = value
     
     # visited attribute getter and setter methods
-    def get_visited(self):
+    def get_visited(self) -> bool:
         return self.visited
-    def set_visited(self,visited):
+    def set_visited(self,visited:bool) -> None:
         self.visited = visited
     
-    def check_cell(self, x, y,grid):#ver qual é o quadrado que esta no momento
+    # Method that see which square is currently in and returns the same
+    def check_cell(self, x:int, y:int,grid:list[list]) -> Union['Cell',None]:
         for row in grid:
             for cell in row:
                 if cell.get_x() == x and cell.get_y() == y: return cell
         return None
     
-
-    def check_neighbors(self,grid):
-        neighbors = []
+    # Method that sees which neighbors are available and chooses one to follow
+    def check_neighbors(self,grid:list[list]) -> Union['Cell',bool]:
+        neighbors:list = []
         # Check the top neighbor
-        top = self.check_cell(self.get_x(), self.get_y()-1,grid)
+        top:Cell = self.check_cell(self.get_x(), self.get_y()-1,grid)
         # Check the right neighbor
-        right = self.check_cell(self.get_x() + 1, self.get_y(),grid)
+        right:Cell = self.check_cell(self.get_x() + 1, self.get_y(),grid)
         # Check the bottom neighbor
-        bottom = self.check_cell(self.get_x(), self.get_y() + 1,grid)
+        bottom:Cell = self.check_cell(self.get_x(), self.get_y() + 1,grid)
         # Check the left neighbor
-        left = self.check_cell(self.get_x() - 1, self.get_y(),grid)
+        left:Cell = self.check_cell(self.get_x() - 1, self.get_y(),grid)
 
-        # If there is a cell on top/right/bottom/left of the current cell, 
-        #and that cell(top/right/bottom/left) it's not visited gets added to the list
+        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
+        # gets added to the list. If there is more than one we choose randomly
         if top and not top.get_visited():
             neighbors.append(top)
         if right and not right.get_visited():
@@ -71,19 +71,25 @@ class Cell:
             neighbors.append(left)
         return choice(neighbors) if neighbors else False 
     
-    # If the list is empty return a false value
-    def remove_walls(self, next):
+    # Method that remove the walls from the cells
+    def remove_walls(self, next:'Cell') -> None:
+        # Calculate the difference in x coordinates between the current cell and the next cell
         dx:int = self.x - next.x
+        # If the difference is 1 (indicating next cell is to the left of current cell)
         if dx == 1:
-            self.set_wall('left',False)
-            next.set_wall('right',False) ##################### MISS COMMENTS #################################
+            self.set_wall('left',False) # In the current cell removes the left wall 
+            next.set_wall('right',False) # In the next cell removes the right wall 
+        # If the difference is -1 (indicating next cell is to the right of current cell)
         elif dx == -1:
-            self.set_wall('right',False)
-            next.set_wall('left',False)
+            self.set_wall('right',False) # In the current cell removes the right wall 
+            next.set_wall('left',False) # In the next cell removes the left wall 
+        # Calculate the difference in y coordinates between the current cell and the next cell
         dy:int = self.y - next.y
+        # If the difference is 1 (indicating next cell is above the current cell)
         if dy == 1:
-            self.set_wall('top',False)
-            next.set_wall('bottom',False)
+            self.set_wall('top',False) # In the current cell removes the top wall 
+            next.set_wall('bottom',False) # In the next cell removes the bottom wall 
+        # If the difference is -1 (indicating next cell is below the current cell)
         elif dy == -1:
-            self.set_wall('bottom',False)
-            next.set_wall('top',False)
+            self.set_wall('bottom',False) # In the current cell removes the bottom wall 
+            next.set_wall('top',False) # In the next cell removes the top wall 

@@ -78,12 +78,12 @@ class view:
         pygame.display.update()#updates the display
     
     def pick_color_btn_wls_click(self):
-        self.current_color_wls = self.pickerView.color_picker(self.current_color_wls)
+        self.current_color_wls = self.pickerView.color_picker(self.current_color_wls,self)
         self.rect_wls = pygame.draw.rect(self.screen, self.current_color_wls, (self.screen_width-57, 165, 35, 35))
         self.clear_grid()
     
     def pick_color_btn_bg_click(self):
-        self.current_color_bg = self.pickerView.color_picker(self.current_color_bg)
+        self.current_color_bg = self.pickerView.color_picker(self.current_color_bg,self)
         self.rect_bg = pygame.draw.rect(self.screen, self.current_color_bg, (self.screen_width-57, 215, 35, 35))
         self.clear_grid()
 
