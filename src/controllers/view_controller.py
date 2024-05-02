@@ -11,4 +11,5 @@ class ViewController:
         self.maze_controller.set_grid(rows,cols) # Method that creates the grid
         self.maze:'Maze' = self.maze_controller.generate_maze() # Method that creates the maze in the grid created above
         return self.maze
+    
 
