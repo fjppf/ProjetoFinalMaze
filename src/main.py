@@ -2,19 +2,29 @@
 # "pip install -r requirements.txt"
 
 import pygame
-from controllers.controller_manager import ControllerManager
-from controllers.view_controller import ViewController
+import pygame_widgets
+from views.view import View
 
+# The main method of the entire program
 def main() -> None:
+    # Initializes all parts of Pygame modules that are necessary to start the application. This includes initializing the video subsystem, sound, fonts, etc.
     pygame.init()
-    # Creating the view controller instance
-    view_controller:ViewController = ViewController()
-    # creating the manager controller instance
-    manager:ControllerManager = ControllerManager()
-    # Add the controllers we want it to run to the controller manager
-    manager.add_controller(view_controller)
-    # Run the method called "run" from controller_manager which will make it the main function of the program
-    manager.run()
+    # Call the main view of the program
+    view:View = View()
+    
+    # Start the main loop that will keep the program running until the window is closed.
+    running:bool = True
+    while running:  
+        events:pygame.event = pygame.event.get()  # Get all events
+        for event in events:
+            if event.type == pygame.QUIT: # User clicks the window close button
+                running = False
+                break  
+            
+        pygame_widgets.update(events) # Update Pygame widgets
+        pygame.display.flip() # Update the screen once per iteration
+        
+    pygame.quit() # Closes the program and all processes
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from models.Maze import Maze
-class maze_controller:
+class MazeController:
     # Class constructor
     def __init__(self) -> None:
         self.maze:Maze = Maze()

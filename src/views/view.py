@@ -3,14 +3,12 @@ import pygame_gui
 import pygame_gui.ui_manager
 from pygame_widgets.button import Button
 from pygame_widgets.textbox import TextBox
-from views.picker_view import picker_view
-import pygame_widgets
+from controllers.view_controller import ViewController
 
-class view:
+class View:
     # Class constructor
-    def __init__(self,controller) -> None:
-        self.view_controller:'view_controller' = controller
-        
+    def __init__(self) -> None:
+        self.view_controller:ViewController = ViewController()
         # Get the size of the main monitor
         screen_info:pygame.display = pygame.display.Info()
         self.screen_width:int = screen_info.current_w # Screen width
@@ -21,9 +19,6 @@ class view:
         self.ui_manager:pygame_gui.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
         self.screen.fill((255, 255, 255))
         pygame.display.set_caption("Maze Simulator")
-        
-        # Instantiate from color picker view
-        self.pickerView:picker_view = picker_view(self.screen,self.ui_manager)
         
         # Desenhar os elementos na view
         self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
@@ -61,72 +56,87 @@ class view:
         self.createBtn = Button(self.screen, self.screen_width-370, 285, 175, 60, radius=0, onClick=self.create_btn_click, image=pygame.transform.scale(create_Btn_img,(175,60)))
         
         solve_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
-        self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.clear_grid, image=pygame.transform.scale(solve_Btn_img,(175,60)))
+        self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.clear_screen, image=pygame.transform.scale(solve_Btn_img,(175,60)))
         
         clear_Btn_img:pygame.image = pygame.image.load("src/images/button_create.png").convert()   
         self.clearBtn = Button(self.screen, self.screen_width-370, 365, 175, 60, radius=0, onClick=self.clear_btn_click, image=pygame.transform.scale(clear_Btn_img,(175,60)))
         
         save_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
-        self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.clear_grid, image=pygame.transform.scale(save_Btn_img,(175,60)))
+        self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.clear_screen, image=pygame.transform.scale(save_Btn_img,(175,60)))
         # Draw text in view
         self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
         
         # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
         # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
         lsBtn:pygame.image = pygame.image.load("src/images/button_clear-maze.png").convert()  
-        self.lsearchbtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_grid, image=pygame.transform.scale(lsBtn,(175,60)))
+        self.lsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(lsBtn,(175,60)))
 
         brBtn:pygame.image = pygame.image.load("src/images/button_breadth-algorithm.png").convert()  
-        self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.clear_grid, image=pygame.transform.scale(brBtn,(175,60)))
+        self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(brBtn,(175,60)))
 
         daBtn:pygame.image = pygame.image.load("src/images/button_depth-algorithm.png").convert()  
-        self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.clear_grid, image=pygame.transform.scale(daBtn,(175,60)))
+        self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(daBtn,(175,60)))
 
         asBtn:pygame.image = pygame.image.load("src/images/button_a-search-algorithm.png").convert()  
-        self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.clear_grid, image=pygame.transform.scale(asBtn,(175,60)))
+        self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(asBtn,(175,60)))
         
         pygame.display.update()#updates the display
     
     # Method called when clicking on the walls picker_color button    
     def pick_color_btn_wls_click(self) -> None:
-        self.current_color_wls:'pickerView' = self.pickerView.color_picker(self.current_color_wls,self)
+        # Open a second window for the user to choose the color they want
+        self.current_color_wls:pygame.color = self.view_controller.open_color_picker(self.screen,self.ui_manager,self.current_color_wls)
         self.rect_wls:pygame.rect = pygame.draw.rect(self.screen, self.current_color_wls, (self.screen_width-57, 165, 35, 35))
-        self.clear_grid()
+        self.clear_screen()
     
     # Method called when clicking on the background picker_color button
     def pick_color_btn_bg_click(self) -> None:
-        self.current_color_bg:'pickerView' = self.pickerView.color_picker(self.current_color_bg,self)
+        # Open a second window for the user to choose the color they want
+        self.current_color_bg:pygame.color = self.view_controller.open_color_picker(self.screen,self.ui_manager,self.current_color_bg)
         self.rect_bg:pygame.rect = pygame.draw.rect(self.screen, self.current_color_bg, (self.screen_width-57, 215, 35, 35))
-        self.clear_grid()
+        self.clear_screen()
 
-    # Metodo chamado quando se clica no botao principal create
+    # Method called when clicking on the main create button
     def create_btn_click(self) -> None:
+        # Disable certain buttons and call the method that draws the maze
         self.createBtn.disable()
         self.pick_color_btn_wls.disable()
         self.pick_color_btn_bg.disable()
         self.draw_maze()
     
-    # Metodo chamado quando se clica no botao principal solve
+    # Method called when clicking on the main solve button
     def solve_btn_click(self) -> None:
         pass
     
-    # Metodo chamado quando se clica no botão principal clear
+    # Method called when the main clear button is clicked
     def clear_btn_click(self) -> None:
         self.createBtn.enable()
         self.pick_color_btn_wls.enable()
         self.pick_color_btn_bg.enable()
-        self.clear_grid()
+        self.clear_screen()
     
-    # Metodo chamada quando se clica no botão principal Save
+    # Call method when clicking on the main Save button
     def save_btn_click(self) -> None:
         pass
     
     # Method called when clicking on the secondary button for the L* Search algorithm
-    def lsearchbtn_click(self) -> None:
+    def lsearchBtn_click(self) -> None:
         pass
     
-    # 
-    def draw_cell(self,cell, bg_color, wl_color) -> None: #desenhar a grid
+    # Method called when clicking on the secondary button for the Breadth Search algorithm
+    def breadthBtn_click(self) -> None:
+        pass
+    
+    # Method called when clicking on the secondary button for the Depth First Search algorithm
+    def depthBtn_click(self) -> None:
+        pass
+    
+    # Method called when clicking on the secondary button for the A* Search algorithm
+    def asearchBtn_click(self) -> None:
+        pass
+    
+    # Method whose function is to draw a certain cell on the screen according to certain restrictions or characteristics
+    def draw_cell(self,cell:'Cell', bg_color:pygame.color, wl_color:pygame.color) -> None: 
         x:int = cell.get_x() * cell.get_size() # Stores the x coordinate of the cell on the screen
         y:int = cell.get_y() * cell.get_size() # Stores the y coordinate of the cell on the screen
         
@@ -143,10 +153,13 @@ class view:
             pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y + cell.get_size()), (x , y + cell.get_size()))
         if cell.get_wall('left'):
             pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y + cell.get_size()), (x, y))
-            
+    
+    # The method that aims to draw the entire maze on the screen also uses the "draw_cell" method
     def draw_maze(self) -> None:
-        #verificação do tamanho das colunas e linhas
-        self.clear_grid()
+        ################################ verificação do tamanho das colunas e linhas #####################################
+        
+        ##################################################################################################################
+        self.clear_screen()
         
         self.maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
         for row in self.maze.get_grid():
@@ -156,12 +169,14 @@ class view:
         self.draw_cell(self.maze.get_end_cell(),"red",self.current_color_wls)
 
         pygame.display.update()
-        
-    def draw_labels(self,text,font, color, x, y) -> None:
-        text_surface = font.render(text, True, color)
+    
+    # Method that draws all labels on the screen according to certain characteristics and in the locations determined and passed as a parameter
+    def draw_labels(self,text:str,font:pygame.font.Font, color, x:int, y:int) -> None:
+        text_surface: pygame.surface = font.render(text, True, color)
         self.screen.blit(text_surface,(x,y))
 
-    def clear_grid(self) -> None:
+    # metodo que limpa o ecra
+    def clear_screen(self) -> None:
         self.screen.fill((255,255,255),pygame.Rect(0, 0, self.screen_width-370, self.screen_height))
 
     
