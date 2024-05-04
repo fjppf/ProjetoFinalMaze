@@ -1,4 +1,5 @@
 import random
+from random import choice
 from models.Cell import Cell
 class Maze:
     # Class constructor
@@ -9,6 +10,7 @@ class Maze:
         self.cols:int = 0
         self.start_cell:Cell = None
         self.end_cell:Cell = None
+        self.solution:list = None
 
     # Grid attribute getter and setter methods
     def get_grid(self) -> list[list]:
@@ -52,6 +54,16 @@ class Maze:
         return self.end_cell
     def set_end_cell(self,cell:Cell) -> None:
         self.end_cell = cell
+        
+    # solution attribute getter and setter methods
+    def get_solution(self) -> list:
+        return self.solution
+    
+    def set_solution(self,solution:list) -> list:
+        self.solution = solution
+        
+    def add_solution(self,cell:Cell) -> None:
+        self.solution.append(cell)
     
     # Method that will generate the maze itself
     def generate_maze(self) -> 'Maze':
@@ -61,7 +73,9 @@ class Maze:
         # Loop until there are no more unvisited cells
         while True:
             current_cell.set_visited(True) # Mark the current cell as visited
-            next_cell:Cell = current_cell.check_neighbors(self.get_grid()) # Get the next unvisited neighbor
+            neighbors:list = current_cell.check_neighbors(self.get_grid())
+            # Get the next unvisited neighbor. If there is more than one we choose randomly
+            next_cell:Cell = choice(neighbors) if neighbors else False 
             if next_cell: # If there is an unvisited neighbor
                 next_cell.set_visited(True) # Mark the next cell as visited
                 stack.append(current_cell) # Add the current cell to the stack
@@ -77,7 +91,7 @@ class Maze:
             # Assign a random final house in the 4th quadrant of the maze
             self.set_end_cell(self.get_grid()[random.randint(self.get_rows()//2, self.get_rows()-1)][random.randint(self.get_cols()//2,self.get_cols()-1)])
         
-        # Clear all visited attributes of each maze cell for future use in the search for resolution ############### verificar
+        # Clear all visited attributes of each maze cell for future use in the search for resolution
         temp_grid:list[list] = self.get_grid() # Temporary variable to store the current grid
         for row in range(0,self.rows):            
             for col in range(0,self.cols):

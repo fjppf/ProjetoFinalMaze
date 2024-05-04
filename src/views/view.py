@@ -62,7 +62,7 @@ class View:
         self.clearBtn = Button(self.screen, self.screen_width-370, 365, 175, 60, radius=0, onClick=self.clear_btn_click, image=pygame.transform.scale(clear_Btn_img,(175,60)))
         
         save_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
-        self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.clear_screen, image=pygame.transform.scale(save_Btn_img,(175,60)))
+        self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.save_btn_click, image=pygame.transform.scale(save_Btn_img,(175,60)))
         # Draw text in view
         self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
         
@@ -117,7 +117,7 @@ class View:
     
     # Call method when clicking on the main Save button
     def save_btn_click(self) -> None:
-        pass
+        self.view_controller.save_maze(self.screen)
     
     # Method called when clicking on the secondary button for the L* Search algorithm
     def lsearchBtn_click(self) -> None:
@@ -125,6 +125,9 @@ class View:
     
     # Method called when clicking on the secondary button for the Breadth Search algorithm
     def breadthBtn_click(self) -> None:
+        # while True:
+        #     #cell = 
+        #     if
         pass
     
     # Method called when clicking on the secondary button for the Depth First Search algorithm

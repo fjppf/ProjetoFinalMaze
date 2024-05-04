@@ -1,4 +1,3 @@
-from random import choice
 from typing import Union
 class Cell:
     # Class constructor
@@ -60,7 +59,7 @@ class Cell:
         left:Cell = self.check_cell(self.get_x() - 1, self.get_y(),grid)
 
         # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
-        # gets added to the list. If there is more than one we choose randomly
+        # gets added to the list.
         if top and not top.get_visited():
             neighbors.append(top)
         if right and not right.get_visited():
@@ -69,7 +68,7 @@ class Cell:
             neighbors.append(bottom)
         if left and not left.get_visited(): 
             neighbors.append(left)
-        return choice(neighbors) if neighbors else False 
+        return neighbors
     
     # Method that remove the walls from the cells
     def remove_walls(self, next:'Cell') -> None:
