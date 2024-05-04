@@ -1,6 +1,7 @@
 import random
 from random import choice
 from models.Cell import Cell
+from collections import deque
 class Maze:
     # Class constructor
     def __init__(self) -> None:
@@ -10,6 +11,11 @@ class Maze:
         self.cols:int = 0
         self.start_cell:Cell = None
         self.end_cell:Cell = None
+        self.current_cell:Cell = None
+        self.next_cell:Cell = None
+        self.neighbors:list = None
+        self.stack:list = None
+        self.queue:deque = None
         self.solution:list = None
 
     # Grid attribute getter and setter methods
@@ -54,7 +60,57 @@ class Maze:
         return self.end_cell
     def set_end_cell(self,cell:Cell) -> None:
         self.end_cell = cell
+    
+    # current_cell attribute getter and setter methods
+    def get_current_cell(self)-> Cell:
+        return self.current_cell
+    
+    def set_current_cell(self,cell:Cell)->None:
+        self.current_cell = cell
+    
+    # next_cell attribute getter and setter methods
+    def get_next_cell(self)-> Cell:
+        return self.next_cell
+    
+    def set_next_cell(self,cell:Cell)->None:
+        self.next_cell = cell
         
+    # neighbors attribute getter and setter methods
+    def get_neighbors(self)->list:
+        return self.neighbors
+    
+    def set_neighbors(self,list:list)->None:
+        self.neighbors = list
+        
+    def add_neighbor(self,cell:Cell)->None:
+        self.neighbors.append(cell)
+        
+    # stack attribute getter and setter methods
+    def get_stack(self)->list:
+        return self.stack
+    
+    def set_stack(self,list:list)->None:
+        self.stack = list
+        
+    def add_stack(self,cell:Cell)->None:
+        self.stack.append(cell)
+        
+    def remove_stack(self)->Cell:
+        return self.stack.pop()
+    
+    # queue attribute getter and setter methods
+    def get_queue(self)->deque:
+        return self.queue
+    
+    def set_queue(self,queue:deque)->None:
+        self.queue = queue
+        
+    def add_queue(self,cell:Cell)->None:
+        self.queue.append(cell)
+    
+    def remove_queue(self)->Cell:
+        return self.queue.popleft()
+    
     # solution attribute getter and setter methods
     def get_solution(self) -> list:
         return self.solution
@@ -65,24 +121,25 @@ class Maze:
     def add_solution(self,cell:Cell) -> None:
         self.solution.append(cell)
     
+    
     # Method that will generate the maze itself
     def generate_maze(self) -> 'Maze':
-        current_cell:Cell = self.get_grid()[0][0]
+        self.set_current_cell(self.get_grid()[0][0])
         # Empty stack where all the cells that are going to be visited will be added
-        stack:list = []
+        self.set_stack([])
         # Loop until there are no more unvisited cells
-        while True:
-            current_cell.set_visited(True) # Mark the current cell as visited
-            neighbors:list = current_cell.check_neighbors(self.get_grid())
+        while True: 
+            self.get_current_cell().set_visited(True) # Mark the current cell as visited
+            self.set_neighbors(self.get_current_cell().check_neighbors(self.get_grid()))
             # Get the next unvisited neighbor. If there is more than one we choose randomly
-            next_cell:Cell = choice(neighbors) if neighbors else False 
-            if next_cell: # If there is an unvisited neighbor
-                next_cell.set_visited(True) # Mark the next cell as visited
-                stack.append(current_cell) # Add the current cell to the stack
-                current_cell.remove_walls(next_cell) # Remove the walls between the current and next cell
-                current_cell = next_cell  # Move to the next cell
-            elif stack: # If the stack is not empty
-                current_cell = stack.pop() # Move back to the previous cell
+            self.set_next_cell(choice(self.get_neighbors())) if self.get_neighbors() else self.set_next_cell(None)
+            if self.get_next_cell(): # If there is an unvisited neighbor
+                self.get_next_cell().set_visited(True) # Mark the next cell as visited
+                self.add_stack(self.get_current_cell()) # Add the current cell to the stack
+                self.get_current_cell().remove_walls(self.get_next_cell()) # Remove the walls between the current and next cell
+                self.set_current_cell(self.get_next_cell())  # Move to the next cell
+            elif self.get_stack(): # If the stack is not empty
+                self.set_current_cell(self.remove_stack()) # Move back to the previous cell
             else:
                 break # Exit the loop when there are no more unvisited cells
             
@@ -96,7 +153,17 @@ class Maze:
         for row in range(0,self.rows):            
             for col in range(0,self.cols):
                 temp_grid[row][col].set_visited(False)
+        
+        # Clear all variables used
         self.set_grid(temp_grid)
         del temp_grid # Free memory by deleting temporary variable
+        self.set_current_cell(None)
+        self.set_neighbors(None)
+        self.set_stack(None)
+        self.set_next_cell(None)
         
         return self
+    
+    #
+    def first_fase_breadth(self):
+        self.current_cell:Cell = self.get_grid()[0][0]

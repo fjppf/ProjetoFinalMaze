@@ -29,11 +29,11 @@ class View:
         # Draw text in view
         self.draw_labels("Number of columns :", self.text_font,self.color_black,self.screen_width-370,75)
         # Draw textbox to insert the desired number of columns (screen, x, y, text width, text height, font size, border color, text color)        
-        self.txtNumbCols:TextBox = TextBox(self.screen, self.screen_width-212, 70, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 200, 0))
+        self.txtNumbCols:TextBox = TextBox(self.screen, self.screen_width-212, 70, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
         # Draw text in view
         self.draw_labels("Number of rows :", self.text_font,self.color_black,self.screen_width-343,120)
         # Draw textbox to insert the desired number of columns
-        self.txtNumbRowss:TextBox = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 200, 0))
+        self.txtNumbRowss:TextBox = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
         # Draw text in view
         self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
         
@@ -97,12 +97,18 @@ class View:
         self.clear_screen()
 
     # Method called when clicking on the main create button
-    def create_btn_click(self) -> None:
-        # Disable certain buttons and call the method that draws the maze
-        self.createBtn.disable()
-        self.pick_color_btn_wls.disable()
-        self.pick_color_btn_bg.disable()
-        self.draw_maze()
+    def create_btn_click(self) -> None:   
+        # check inputs
+        check:tuple = self.view_controller.check_inputs(int(self.txtNumbCols.getText()),int(self.txtNumbRowss.getText()),self.screen_width,self.screen_height)
+        if len(check)==0:
+            # Disable certain buttons and call the method that draws the maze
+            self.createBtn.disable()
+            self.pick_color_btn_wls.disable()
+            self.pick_color_btn_bg.disable()
+            self.draw_maze()
+        else:
+            self.txtNumbCols.setText(f"Max Columns:{check[0]}")
+            self.txtNumbRowss.setText(f"Max rows: {check[1]}")
     
     # Method called when clicking on the main solve button
     def solve_btn_click(self) -> None:
