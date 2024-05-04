@@ -1,4 +1,5 @@
 import os
+import random
 import pygame
 import pygame_gui.ui_manager
 from controllers.maze_controller import MazeController
@@ -15,7 +16,6 @@ class ViewController:
         
         return () if columns<=valid_width and rows<=valid_height else (valid_width,valid_height)
         
-    
     # Method that contacts the maze controller to tell it to generate the maze
     def generate_maze(self,rows:int,cols:int) -> 'Maze': 
         self.maze_controller.set_grid(rows,cols) # Method that creates the grid
@@ -46,4 +46,24 @@ class ViewController:
     def clear_solution(self) -> None:
         self.maze_controller.clear_solution()
     
-
+    #################################################################################################################################
+    def get_different_color(self,color1: pygame.Color, color2: pygame.Color, color3: pygame.Color, color4: pygame.Color) -> pygame.Color:
+        while True:
+            new_color = pygame.Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            
+            # Verifica se a nova cor é suficientemente diferente de color1
+            if all(abs(new_color[i] - color1[i]) > 50 for i in range(3)):
+                # Verifica se a nova cor é suficientemente diferente de color2
+                if all(abs(new_color[i] - color2[i]) > 50 for i in range(3)):
+                    # Verifica se a nova cor é suficientemente diferente de color3
+                    if all(abs(new_color[i] - color3[i]) > 50 for i in range(3)):
+                        # Verifica se a nova cor é suficientemente diferente de color4
+                        if all(abs(new_color[i] - color4[i]) > 50 for i in range(3)):
+                            return new_color
+            
+    # Metodos para o algoritmo Breadth
+    def first_fase_breadth(self) -> None:
+        self.maze_controller.first_fase_breadth()
+    
+    def second_fase_breadth(self):
+        pass

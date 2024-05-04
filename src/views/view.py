@@ -72,7 +72,7 @@ class View:
         self.lsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(lsBtn,(175,60)))
 
         brBtn:pygame.image = pygame.image.load("src/images/button_breadth-algorithm.png").convert()  
-        self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(brBtn,(175,60)))
+        self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.breadthBtn_click, image=pygame.transform.scale(brBtn,(175,60)))
 
         daBtn:pygame.image = pygame.image.load("src/images/button_depth-algorithm.png").convert()  
         self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(daBtn,(175,60)))
@@ -128,13 +128,16 @@ class View:
     # Method called when clicking on the secondary button for the L* Search algorithm
     def lsearchBtn_click(self) -> None:
         pass
-    
+    ##################################################################################################################################################
     # Method called when clicking on the secondary button for the Breadth Search algorithm
     def breadthBtn_click(self) -> None:
+        solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,"green","red")
+        self.view_controller.first_fase_breadth()
+ 
         # while True:
-        #     #cell = 
+        #     self.draw_cell(return_cell, solution_color, self.current_color_wls) if return_cell != False else None
         #     if
-        pass
+        
     
     # Method called when clicking on the secondary button for the Depth First Search algorithm
     def depthBtn_click(self) -> None:

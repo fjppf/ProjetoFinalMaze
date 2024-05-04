@@ -14,7 +14,7 @@ class Maze:
         self.current_cell:Cell = None
         self.next_cell:Cell = None
         self.neighbors:list = None
-        self.stack:list = None
+        self.stack:list = []
         self.queue:deque = None
         self.solution:list = None
 
@@ -125,8 +125,6 @@ class Maze:
     # Method that will generate the maze itself
     def generate_maze(self) -> 'Maze':
         self.set_current_cell(self.get_grid()[0][0])
-        # Empty stack where all the cells that are going to be visited will be added
-        self.set_stack([])
         # Loop until there are no more unvisited cells
         while True: 
             self.get_current_cell().set_visited(True) # Mark the current cell as visited
@@ -159,11 +157,30 @@ class Maze:
         del temp_grid # Free memory by deleting temporary variable
         self.set_current_cell(None)
         self.set_neighbors(None)
-        self.set_stack(None)
+        self.set_stack([])
         self.set_next_cell(None)
         
         return self
     
-    #
-    def first_fase_breadth(self):
-        self.current_cell:Cell = self.get_grid()[0][0]
+    #################################################################################################################
+    def first_fase_breadth(self) -> None:
+        self.add_queue(self.get_start_cell())
+    
+    def second_fase_breadth(self):
+        self.set_current_cell(self.remove_queue())
+        self.get_current_cell().set_visited(True) # Mark the current cell as visited
+        
+        
+        
+        self.set_neighbors(self.get_current_cell().check_neighbors(self.get_grid()))
+        # Get the next unvisited neighbor. If there is more than one we choose randomly
+        self.set_next_cell(choice(self.get_neighbors())) if self.get_neighbors() else self.set_next_cell(None)
+        if self.get_next_cell(): # If there is an unvisited neighbor
+            self.get_next_cell().set_visited(True) # Mark the next cell as visited
+            self.add_stack(self.get_current_cell()) # Add the current cell to the stack
+            self.get_current_cell().remove_walls(self.get_next_cell()) # Remove the walls between the current and next cell
+            self.set_current_cell(self.get_next_cell())  # Move to the next cell
+        elif self.get_stack(): # If the stack is not empty
+            self.set_current_cell(self.remove_stack()) # Move back to the previous cell
+        else:
+            pass

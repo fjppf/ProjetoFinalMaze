@@ -20,9 +20,16 @@ class MazeController:
         return (self.maze.get_cols()*20+40,self.maze.get_rows()*20+40)
     
     # Get a valid name to save the maze
-    def get_save_name_maze(self)-> str:
+    def get_save_name_maze(self) -> str:
         return f"Maze {self.maze.get_cols()}x{self.maze.get_rows()}_{random.randint(0, 1000)}.png"
     
     # Clear the solution of the maze
     def clear_solution(self):
         self.maze.set_solution(None)
+        
+    #############################################################
+    def first_fase_breadth(self) -> None:
+        self.maze.first_fase_breadth()
+    
+    def second_fase_breadth(self):
+        pass
