@@ -1,3 +1,4 @@
+from typing import Union
 from models.Maze import Maze
 import random
 class MazeController:
@@ -31,5 +32,5 @@ class MazeController:
     def first_fase_breadth(self) -> None:
         self.maze.first_fase_breadth()
     
-    def second_fase_breadth(self):
-        pass
+    def second_fase_breadth(self)-> Union['Cell',list]:
+        return self.maze.second_fase_breadth()

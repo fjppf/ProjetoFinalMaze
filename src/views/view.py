@@ -1,3 +1,4 @@
+from typing import Union
 import pygame
 import pygame_gui
 import pygame_gui.ui_manager
@@ -52,7 +53,7 @@ class View:
         
         # Design of the 4 main simulator buttons (Create, Solve, Clear, Save)
         # The background of each button will be an image created by us
-        create_Btn_img:pygame.image = pygame.image.load("src/images/button_create.png").convert()   
+        create_Btn_img:pygame.image = pygame.image.load("src/images/teste.png").convert()
         self.createBtn = Button(self.screen, self.screen_width-370, 285, 175, 60, radius=0, onClick=self.create_btn_click, image=pygame.transform.scale(create_Btn_img,(175,60)))
         
         solve_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
@@ -82,6 +83,74 @@ class View:
         
         pygame.display.update()#updates the display
     
+    # Method whose function is to draw a certain cell on the screen according to certain restrictions or characteristics
+    def draw_cell(self,cell:'Cell', bg_color:pygame.color, wl_color:pygame.color) -> None: 
+        x:int = cell.get_x() * cell.get_size() # Stores the x coordinate of the cell on the screen
+        y:int = cell.get_y() * cell.get_size() # Stores the y coordinate of the cell on the screen
+        
+        # Drawing the cell on the screen
+        pygame.draw.rect(self.screen, pygame.Color(bg_color),(x,y,cell.get_size(), cell.get_size()))
+
+        # The following code checks which walls the cell is supposed to have by checking the walls attribute 
+        # of the respective cell and, if so, draw it on the screen using pygame.draw.line
+        if cell.get_wall('top'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y), (x + cell.get_size(), y)) #line(surface, color, start_pos, end_pos)
+        if cell.get_wall('right'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y), (x + cell.get_size(), y + cell.get_size()))
+        if cell.get_wall('bottom'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y + cell.get_size()), (x , y + cell.get_size()))
+        if cell.get_wall('left'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y + cell.get_size()), (x, y))
+    
+    # Method whose function is to draw the solution on the screen
+    def draw_solution(self, cell: 'Cell', bg_color: pygame.color, wl_color: pygame.color,solution:pygame.color) -> None:
+        x: int = cell.get_x() * cell.get_size() + cell.get_size() // 2  # Stores the x coordinate of the center of the cell on the screen
+        y: int = cell.get_y() * cell.get_size() + cell.get_size() // 2  # Stores the y coordinate of the center of the cell on the screen
+        
+        # Draw the cell background
+        pygame.draw.rect(self.screen, pygame.Color(bg_color), (cell.get_x() * cell.get_size(), cell.get_y() * cell.get_size(), cell.get_size(), cell.get_size()))
+
+        # Draw a circle in the middle of the cell
+        pygame.draw.circle(self.screen, solution, (x, y), cell.get_size() // 4)  # circle(surface, color, center, radius)
+
+        # Draw walls if present
+        if cell.get_wall('top'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (cell.get_x() * cell.get_size(), cell.get_y() * cell.get_size()), ((cell.get_x() + 1) * cell.get_size(), cell.get_y() * cell.get_size()))
+        if cell.get_wall('right'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), ((cell.get_x() + 1) * cell.get_size(), cell.get_y() * cell.get_size()), ((cell.get_x() + 1) * cell.get_size(), (cell.get_y() + 1) * cell.get_size()))
+        if cell.get_wall('bottom'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), ((cell.get_x() + 1) * cell.get_size(), (cell.get_y() + 1) * cell.get_size()), (cell.get_x() * cell.get_size(), (cell.get_y() + 1) * cell.get_size()))
+        if cell.get_wall('left'):
+            pygame.draw.line(self.screen, pygame.Color(wl_color), (cell.get_x() * cell.get_size(), (cell.get_y() + 1) * cell.get_size()), (cell.get_x() * cell.get_size(), cell.get_y() * cell.get_size()))
+
+    
+    # The method that aims to draw the entire maze on the screen also uses the "draw_cell" method
+    def draw_maze(self) -> None:
+        self.clear_screen()
+
+        for row in self.maze.get_grid():
+            for cell in row:
+                self.draw_cell(cell,self.current_color_bg,self.current_color_wls)
+        self.draw_cell(self.maze.get_start_cell(),"green",self.current_color_wls)
+        for cell in self.maze.get_end_cells():
+            self.draw_cell(cell,"red",self.current_color_wls)
+
+        pygame.display.update()
+        
+    # The method that generate the maze
+    def generate_maze(self)->None:
+        self.maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
+        self.draw_maze()
+        
+    # Method that draws all labels on the screen according to certain characteristics and in the locations determined and passed as a parameter
+    def draw_labels(self,text:str,font:pygame.font.Font, color, x:int, y:int) -> None:
+        text_surface: pygame.surface = font.render(text, True, color)
+        self.screen.blit(text_surface,(x,y))
+
+    # metodo que limpa o ecra
+    def clear_screen(self) -> None:
+        self.screen.fill((255,255,255),pygame.Rect(0, 0, self.screen_width-370, self.screen_height))
+        
     # Method called when clicking on the walls picker_color button    
     def pick_color_btn_wls_click(self) -> None:
         # Open a second window for the user to choose the color they want
@@ -105,7 +174,7 @@ class View:
             self.createBtn.disable()
             self.pick_color_btn_wls.disable()
             self.pick_color_btn_bg.disable()
-            self.draw_maze()
+            self.generate_maze()
         else:
             self.txtNumbCols.setText(f"Max Columns:{check[0]}")
             self.txtNumbRowss.setText(f"Max rows: {check[1]}")
@@ -131,13 +200,37 @@ class View:
     ##################################################################################################################################################
     # Method called when clicking on the secondary button for the Breadth Search algorithm
     def breadthBtn_click(self) -> None:
-        solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,"green","red")
-        self.view_controller.first_fase_breadth()
- 
-        # while True:
-        #     self.draw_cell(return_cell, solution_color, self.current_color_wls) if return_cell != False else None
-        #     if
+        # Disable all other buttons except the secondary buttons and clear or save button.
+        self.pick_color_btn_wls.disable()
+        self.pick_color_btn_bg.disable()
+        self.createBtn.disable()
+        self.solveBtn.disable()
+        self.clear_screen()
+        self.draw_maze()
+        pygame.display.update()
         
+        solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,pygame.Color("green"),pygame.Color("red"))
+        self.view_controller.first_fase_algorithm()
+        running:bool = True
+        while running:
+            return_value:Union['Cell',list] = self.view_controller.second_fase_breadth()
+            if isinstance(return_value, list):
+                self.clear_screen()
+                self.draw_maze()
+                for solution in return_value:
+                    for cell in solution[1:-1]:
+                        self.draw_solution(cell, self.current_color_bg, self.current_color_wls, solution_color)
+                running = False
+                self.draw_cell(self.maze.get_start_cell(),"green",self.current_color_wls)  
+                for cell in self.maze.get_end_cells():
+                    self.draw_cell(cell,"red",self.current_color_wls)
+                pygame.display.update()
+            elif return_value is None:
+                continue
+            else:   
+                self.draw_solution(return_value, self.current_color_bg, self.current_color_wls, solution_color)
+                pygame.time.delay(100)
+                pygame.display.update()
     
     # Method called when clicking on the secondary button for the Depth First Search algorithm
     def depthBtn_click(self) -> None:
@@ -147,49 +240,7 @@ class View:
     def asearchBtn_click(self) -> None:
         pass
     
-    # Method whose function is to draw a certain cell on the screen according to certain restrictions or characteristics
-    def draw_cell(self,cell:'Cell', bg_color:pygame.color, wl_color:pygame.color) -> None: 
-        x:int = cell.get_x() * cell.get_size() # Stores the x coordinate of the cell on the screen
-        y:int = cell.get_y() * cell.get_size() # Stores the y coordinate of the cell on the screen
-        
-        # Drawing the cell on the screen
-        pygame.draw.rect(self.screen, pygame.Color(bg_color),(x,y,cell.get_size(), cell.get_size()))
-
-        # The following code checks which walls the cell is supposed to have by checking the walls attribute 
-        # of the respective cell and, if so, draw it on the screen using pygame.draw.line
-        if cell.get_wall('top'):
-            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y), (x + cell.get_size(), y)) #line(surface, color, start_pos, end_pos)
-        if cell.get_wall('right'):
-            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y), (x + cell.get_size(), y + cell.get_size()))
-        if cell.get_wall('bottom'):
-            pygame.draw.line(self.screen, pygame.Color(wl_color), (x + cell.get_size(), y + cell.get_size()), (x , y + cell.get_size()))
-        if cell.get_wall('left'):
-            pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y + cell.get_size()), (x, y))
     
-    # The method that aims to draw the entire maze on the screen also uses the "draw_cell" method
-    def draw_maze(self) -> None:
-        ################################ verificação do tamanho das colunas e linhas #####################################
-        
-        ##################################################################################################################
-        self.clear_screen()
-        
-        self.maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
-        for row in self.maze.get_grid():
-            for cell in row:
-                self.draw_cell(cell,self.current_color_bg,self.current_color_wls)
-        self.draw_cell(self.maze.get_start_cell(),"green",self.current_color_wls)
-        self.draw_cell(self.maze.get_end_cell(),"red",self.current_color_wls)
-
-        pygame.display.update()
-    
-    # Method that draws all labels on the screen according to certain characteristics and in the locations determined and passed as a parameter
-    def draw_labels(self,text:str,font:pygame.font.Font, color, x:int, y:int) -> None:
-        text_surface: pygame.surface = font.render(text, True, color)
-        self.screen.blit(text_surface,(x,y))
-
-    # metodo que limpa o ecra
-    def clear_screen(self) -> None:
-        self.screen.fill((255,255,255),pygame.Rect(0, 0, self.screen_width-370, self.screen_height))
 
     
 

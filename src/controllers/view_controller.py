@@ -1,5 +1,6 @@
 import os
 import random
+from typing import Union
 import pygame
 import pygame_gui.ui_manager
 from controllers.maze_controller import MazeController
@@ -62,8 +63,8 @@ class ViewController:
                             return new_color
             
     # Metodos para o algoritmo Breadth
-    def first_fase_breadth(self) -> None:
+    def first_fase_algorithm(self) -> None:
         self.maze_controller.first_fase_breadth()
     
-    def second_fase_breadth(self):
-        pass
+    def second_fase_breadth(self) -> Union['Cell',list]:
+        return self.maze_controller.second_fase_breadth()

@@ -3,6 +3,8 @@
 
 import pygame
 import pygame_widgets
+import pygame_widgets.button
+import pygame_widgets.widget
 from views.view import View
 
 # The main method of the entire program
@@ -19,7 +21,7 @@ def main() -> None:
         for event in events:
             if event.type == pygame.QUIT: # User clicks the window close button
                 running = False
-                break  
+                break                
             
         pygame_widgets.update(events) # Update Pygame widgets
         pygame.display.flip() # Update the screen once per iteration
