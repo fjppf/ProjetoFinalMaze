@@ -14,7 +14,6 @@ class Maze:
         self.end_cells:list = []
         self.current_cell:Cell = None
         self.next_cell:Cell = None
-        self.neighbors:list = []
         self.stack:list = []
         self.queue:deque = deque()
         self.paths:list = []
@@ -77,15 +76,6 @@ class Maze:
         return self.next_cell
     def set_next_cell(self,cell:Cell)->None:
         self.next_cell = cell
-        
-    # neighbors attribute getter, setter and other methods
-    def get_neighbors(self)->list:
-        return self.neighbors
-    def set_neighbors(self,list:list)->None:
-        self.neighbors = list
-        
-    def add_neighbor(self,cell:Cell)->None:
-        self.neighbors.append(cell)
         
     # paths attribute getter, setter and other methods
     def get_paths(self)->list:
@@ -177,9 +167,9 @@ class Maze:
         # Loop until there are no more unvisited cells
         while True: 
             self.get_current_cell().set_visited(True) # Mark the current cell as visited
-            self.set_neighbors(self.get_current_cell().check_neighbors_generate_maze(self.get_grid()))
+            self.get_current_cell().set_neighbors(self.get_current_cell().check_neighbors_generate_maze(self.get_grid()))
             # Get the next unvisited neighbor. If there is more than one we choose randomly
-            self.set_next_cell(choice(self.get_neighbors())) if self.get_neighbors() else self.set_next_cell(None)
+            self.set_next_cell(choice(self.get_current_cell().get_neighbors())) if self.get_current_cell().get_neighbors() else self.set_next_cell(None)
             if self.get_next_cell(): # If there is an unvisited neighbor
                 self.get_next_cell().set_visited(True) # Mark the next cell as visited
                 self.add_stack(self.get_current_cell()) # Add the current cell to the stack
@@ -197,22 +187,26 @@ class Maze:
         self.set_final_cells()
         
         # Clear all visited attributes of each maze cell for future use in the search for resolution
-        temp_grid:list[list] = self.get_grid() # Temporary variable to store the current grid
-        for row in range(0,self.rows):            
-            for col in range(0,self.cols):
-                temp_grid[row][col].set_visited(False)
+        self.clear_visited_attribute()
         
         # Clear all variables used
-        self.set_grid(temp_grid)
-        del temp_grid # Free memory by deleting temporary variable
+        self.get_current_cell().set_neighbors(None)
         self.set_current_cell(None)
-        self.set_neighbors(None)
         self.set_stack([])
         self.set_next_cell(None)
         
         return self
     
-    #################################################################################################################
+    # Method to clear all visited houses in the maze
+    def clear_visited_attribute(self) -> None:
+        # Clear all visited attributes of each maze cell for future use in the search for resolution
+        temp_grid:list[list] = self.get_grid() # Temporary variable to store the current grid
+        for row in range(0,self.rows):            
+            for col in range(0,self.cols):
+                temp_grid[row][col].set_visited(False)
+        self.set_grid(temp_grid)
+        del temp_grid # Free memory by deleting temporary variable
+                
     # Method that starts the Breadth Search algorithm
     def first_fase_breadth(self) -> None:
         self.set_solutions([]) # Clear the solutions variable
@@ -224,39 +218,53 @@ class Maze:
         self.set_current_cell(self.remove_queue())
         self.get_current_cell().set_visited(True) # Mark the current cell as visited
         # We get all the neighbors that have not yet been visited of the current cell
-        self.set_neighbors(self.get_current_cell().check_neighbors_breadth_algorithm(self.get_grid())) 
+        self.get_current_cell().set_neighbors(self.get_current_cell().check_neighbors_breadth_algorithm(self.get_grid())) 
         #This piece of code creates all possible paths from the current cell in the maze. If more than one neighbor is available, we add the first neighbor to the existing path. 
         # For subsequent neighbors, we copy the current path, excluding the last element (which is already the current neighbor), and add the neighbor under consideration. 
         # This process is repeated for each neighbor, ensuring that we explore all path options from the current cell.        
-        for neighbor_cell in self.get_neighbors():
-            if neighbor_cell == self.get_neighbors()[0]: 
+        for neighbor_cell in self.get_current_cell().get_neighbors():
+            if neighbor_cell == self.get_current_cell().get_neighbors()[0]: 
                 self.add_element_path(self.get_current_cell(), neighbor_cell)
             else:
                 self.add_copy_path(self.get_current_cell(), neighbor_cell)
             self.add_queue(neighbor_cell)
-            
-        # If there are still elements in the queue, then return to the next cell, otherwise it means that the entire path has 
-        # already been explored and returns the possible solutions in the maze
-        if len(self.get_solutions()) == len(self.get_end_cells()):
-            pass
+                               
+        # If the queue still has elements we need to do some checks
         if len(self.get_queue()) != 0:
-            if self.get_queue()[0] == self.get_end_cells():
+            # If the next cell is the final one then we save this path as a solution
+            if self.get_queue()[0] in self.get_end_cells():
                 self.save_solution()
+                # If all the necessary solutions have already been found, then we return these
+                if len(self.get_solutions()) == len(self.get_end_cells()):
+                    self.clear_visited_attribute() # Clear all visited attributes
+                    self.clear_breadth_variables()
+                    return self.get_solutions()
+                return None
+            # we return the next one to be seen
             else:
                 return self.get_queue()[0]
+        # If the queue is empty then all the houses have already been explored, we return all the paths found so far
         else:
-            # Clear all variables used
-            self.set_current_cell(None)
-            self.set_neighbors(None)
-            self.set_queue(deque())
-            self.set_next_cell(None)
-            self.set_paths([])
-            return self.get_solutions()
-
-    # Final method of the Breadth algorithm that aims to return only the solutions from all paths
+            self.clear_visited_attribute() # Clear all visited attributes
+            self.clear_breadth_variables() # Clear all variables used
+            return self.get_solutions()  # return solutions
+    
+    # Method that resets all variables used in the breadth search method
+    def clear_breadth_variables(self) -> None:
+        self.get_current_cell().set_neighbors(None)
+        self.set_current_cell(None)
+        self.set_queue(deque())
+        self.set_next_cell(None)
+        self.set_paths([])
+        
+    # Method of the Breadth algorithm that aims to save the atual solution
     def save_solution(self):
         for path in self.get_paths():
-            if path[-1] == self.get_end_cells(): self.add_solutions(path)            
+            # If the path contains one of the final cells of the maze and that path has not already been saved in the list of solutions
+            if path[-1] in self.get_end_cells() and path not in self.get_solutions(): 
+                # We save a copy of that path using the slicing technique
+                self.add_solutions(path[:])              
+                break       
 
             
         

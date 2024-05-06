@@ -8,6 +8,7 @@ class Cell:
         self.size:int = 20 
         self.walls:dict = {"top": True, "right": True, "bottom": True, "left": True} 
         self.visited:bool = False 
+        self.neighbors:list = []
 
     # x attribute getter and setter methods
     def get_x(self) -> int:
@@ -38,6 +39,15 @@ class Cell:
         return self.visited
     def set_visited(self,visited:bool) -> None:
         self.visited = visited
+    
+    # neighbors attribute getter, setter and other methods
+    def get_neighbors(self)->list:
+        return self.neighbors
+    def set_neighbors(self,list:list)->None:
+        self.neighbors = list
+        
+    def add_neighbor(self,cell:'Cell')->None:
+        self.neighbors.append(cell)
     
     # Method that see which square is currently in and returns the same
     def check_cell(self, x:int, y:int,grid:list[list]) -> Union['Cell',None]:

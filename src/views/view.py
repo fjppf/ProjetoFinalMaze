@@ -207,13 +207,12 @@ class View:
         self.solveBtn.disable()
         self.clear_screen()
         self.draw_maze()
-        pygame.display.update()
-        
+
         solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,pygame.Color("green"),pygame.Color("red"))
         self.view_controller.first_fase_algorithm()
         running:bool = True
         while running:
-            return_value:Union['Cell',list] = self.view_controller.second_fase_breadth()
+            return_value:Union['Cell',list,None] = self.view_controller.second_fase_breadth()
             if isinstance(return_value, list):
                 self.clear_screen()
                 self.draw_maze()
