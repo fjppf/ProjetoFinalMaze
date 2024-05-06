@@ -197,7 +197,7 @@ class View:
     # Method called when clicking on the secondary button for the L* Search algorithm
     def lsearchBtn_click(self) -> None:
         pass
-    ##################################################################################################################################################
+
     # Method called when clicking on the secondary button for the Breadth Search algorithm
     def breadthBtn_click(self) -> None:
         # Disable all other buttons except the secondary buttons and clear or save button.
@@ -209,6 +209,7 @@ class View:
         self.draw_maze()
 
         solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,pygame.Color("green"),pygame.Color("red"))
+        
         self.view_controller.first_fase_algorithm()
         running:bool = True
         while running:

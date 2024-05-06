@@ -33,13 +33,13 @@ class ViewController:
         pygame.display.flip()
         # We create a surface that represents the area to capture
         size:tuple = self.maze_controller.get_px_size_maze() # Get the size of the maze with margins
-        captura_surface:pygame.Surface = pygame.Surface(size)
+        capture_surface:pygame.Surface = pygame.Surface(size)
         # Capture the screen area, excluding the button part
-        captura_surface.blit(screen, (0, 0), pygame.Rect(0, 0, size[0], size[1]))
+        capture_surface.blit(screen, (0, 0), pygame.Rect(0, 0, size[0], size[1]))
         # Get the path of the user's "Images" folder
         folder_images:str = os.path.join(os.path.expanduser('~'), 'Pictures')
         # Save the image of the captured area
-        pygame.image.save(captura_surface,os.path.join(folder_images, self.maze_controller.get_save_name_maze()))
+        pygame.image.save(capture_surface,os.path.join(folder_images, self.maze_controller.get_save_name_maze()))
         # Wait for the image to be saved
         pygame.time.delay(500)
     
@@ -47,22 +47,22 @@ class ViewController:
     def clear_solution(self) -> None:
         self.maze_controller.clear_solution()
     
-    #################################################################################################################################
+    # Method to obtain a different color from the background and walls of the maze
     def get_different_color(self,color1: pygame.Color, color2: pygame.Color, color3: pygame.Color, color4: pygame.Color) -> pygame.Color:
         while True:
             new_color = pygame.Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             
-            # Verifica se a nova cor é suficientemente diferente de color1
+            # Check if the new color is sufficiently different from color1
             if all(abs(new_color[i] - color1[i]) > 50 for i in range(3)):
-                # Verifica se a nova cor é suficientemente diferente de color2
+                # Check if the new color is sufficiently different from color2
                 if all(abs(new_color[i] - color2[i]) > 50 for i in range(3)):
-                    # Verifica se a nova cor é suficientemente diferente de color3
+                    # Check if the new color is sufficiently different from color3
                     if all(abs(new_color[i] - color3[i]) > 50 for i in range(3)):
-                        # Verifica se a nova cor é suficientemente diferente de color4
+                        # Check if the new color is sufficiently different from color4
                         if all(abs(new_color[i] - color4[i]) > 50 for i in range(3)):
                             return new_color
             
-    # Metodos para o algoritmo Breadth
+    # Methods for the Breadth algorithm
     def first_fase_algorithm(self) -> None:
         self.maze_controller.first_fase_breadth()
     

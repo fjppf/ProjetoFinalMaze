@@ -28,7 +28,7 @@ class MazeController:
     def clear_solution(self):
         self.maze.set_solution(None)
         
-    #############################################################
+    # Methods for the Breadth algorithm
     def first_fase_breadth(self) -> None:
         self.maze.first_fase_breadth()
     
