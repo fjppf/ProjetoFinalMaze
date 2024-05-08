@@ -12,7 +12,7 @@ def main() -> None:
     # Initializes all parts of Pygame modules that are necessary to start the application. This includes initializing the video subsystem, sound, fonts, etc.
     pygame.init()
     # Call the main view of the program
-    view:View = View()
+    View()
     
     # Start the main loop that will keep the program running until the window is closed.
     running:bool = True

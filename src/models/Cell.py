@@ -49,37 +49,6 @@ class Cell:
     def add_neighbor(self,cell:'Cell')->None:
         self.neighbors.append(cell)
     
-    # Method that see which square is currently in and returns the same
-    def check_cell(self, x:int, y:int,grid:list[list]) -> Union['Cell',None]:
-        for row in grid:
-            for cell in row:
-                if cell.get_x() == x and cell.get_y() == y: return cell
-        return None
-    
-    # Method that sees which neighbors are available and chooses one to follow
-    def check_neighbors_generate_maze(self,grid:list[list]) -> 'Cell':
-        neighbors:list = []
-        # Check the top neighbor
-        top:Cell = self.check_cell(self.get_x(), self.get_y()-1,grid)
-        # Check the right neighbor
-        right:Cell = self.check_cell(self.get_x() + 1, self.get_y(),grid)
-        # Check the bottom neighbor
-        bottom:Cell = self.check_cell(self.get_x(), self.get_y() + 1,grid)
-        # Check the left neighbor
-        left:Cell = self.check_cell(self.get_x() - 1, self.get_y(),grid)
-
-        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
-        # gets added to the list.
-        if top and not top.get_visited():
-            neighbors.append(top)
-        if right and not right.get_visited():
-            neighbors.append(right)
-        if bottom and not bottom.get_visited(): 
-            neighbors.append(bottom)
-        if left and not left.get_visited(): 
-            neighbors.append(left)
-        return neighbors
-    
     # Method that remove the walls from the cells
     def remove_walls(self, next:'Cell') -> None:
         # Calculate the difference in x coordinates between the current cell and the next cell
@@ -103,26 +72,4 @@ class Cell:
             self.set_wall('bottom',False) # In the current cell removes the bottom wall 
             next.set_wall('top',False) # In the next cell removes the top wall 
             
-    # Method that sees which neighbors are available and chooses one to follow
-    def check_neighbors_breadth_algorithm(self,grid:list[list]) -> 'Cell':
-        neighbors:list = []
-        # Check the top neighbor
-        top:Cell = self.check_cell(self.get_x(), self.get_y()-1,grid)
-        # Check the right neighbor
-        right:Cell = self.check_cell(self.get_x() + 1, self.get_y(),grid)
-        # Check the bottom neighbor
-        bottom:Cell = self.check_cell(self.get_x(), self.get_y() + 1,grid)
-        # Check the left neighbor
-        left:Cell = self.check_cell(self.get_x() - 1, self.get_y(),grid)
-
-        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
-        # gets added to the list.
-        if top and not top.get_visited() and not top.get_wall("bottom"):
-            neighbors.append(top)
-        if right and not right.get_visited() and not right.get_wall("left"):
-            neighbors.append(right)
-        if bottom and not bottom.get_visited() and not bottom.get_wall("top"): 
-            neighbors.append(bottom)
-        if left and not left.get_visited() and not left.get_wall("right"): 
-            neighbors.append(left)
-        return neighbors
+   
