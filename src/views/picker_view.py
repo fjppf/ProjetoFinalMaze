@@ -11,13 +11,17 @@ class PickerView:
     # Method that opens the dialog window that allows the user to choose the desired color
     def color_picker(self, current_colour:pygame.Color) -> pygame.Color:
         colour_picker:UIColourPickerDialog = UIColourPickerDialog(pygame.Rect(160, 50, 420, 400), self.ui_manager, window_title="Pick color", initial_colour=current_colour)
+        colour_picker.resizable = False # Does not allow you to resize the window
+        colour_picker.set_blocking(True) # Does not allow clicks outside the window
         colour_picker.show() # Show the colorpicker
         run:bool = True
         # While the window is open we check all events that exist in that window
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if colour_picker.ok_button.rect.collidepoint(event.pos):  # Clicked on the OK button
+                    if colour_picker.title_bar.rect.collidepoint(event.pos): # Clicked on the title bar
+                        continue
+                    elif colour_picker.ok_button.rect.collidepoint(event.pos):  # Clicked on the OK button
                         run = False
                     elif colour_picker.cancel_button.rect.collidepoint(event.pos):  # Clicked on the cancel button
                         run = False

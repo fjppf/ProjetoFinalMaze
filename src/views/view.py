@@ -1,3 +1,4 @@
+import time
 import pygame
 import pygame_gui
 import pygame_gui.ui_manager
@@ -10,6 +11,11 @@ class View:
     # Class constructor
     def __init__(self) -> None:
         self.view_controller:ViewController = ViewController()
+        
+        # Variables for timers
+        self.generate_maze_time:float = 0.0
+        self.generate_algorithm_time:float = 0.0
+        
         # Get the size of the main monitor
         screen_info:pygame.display = pygame.display.Info()
         self.screen_width:int = screen_info.current_w # Screen width
@@ -20,11 +26,12 @@ class View:
         self.ui_manager:pygame_gui.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
         self.screen.fill((255, 255, 255))
         pygame.display.set_caption("Maze Simulator")
-        
+
         # Desenhar os elementos na view
         self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
         self.title_font:pygame.font = pygame.font.SysFont("Arial Black",30) # Source of titles
         self.color_black:tuple=(0, 0, 0) # Color use in texts
+        
         # Draw title in view (title, font, color, x, y)
         self.draw_labels("Create Maze", self.title_font,self.color_black,self.screen_width-286.5,17)
         # Draw text in view
@@ -126,7 +133,8 @@ class View:
     
     # The method that aims to draw the entire maze on the screen also uses the "draw_cell" method
     def draw_maze(self) -> None:
-        self.clear_screen()
+        self.clear_screen()        
+        self.draw_labels(f"Maze Generating time: {self.generate_maze_time}", pygame.font.SysFont("Arial",15),self.color_black,20,0)
         for row in self.grid_maze:
             for cell in row:
                 self.draw_cell(cell,self.current_color_bg,self.current_color_wls)
@@ -138,8 +146,13 @@ class View:
         
     # The method that generate the maze
     def generate_maze(self)->None:
+        start = time.perf_counter()
         self.grid_maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
+        end = time.perf_counter()
+        self.generate_maze_time = round(start - end, 4)
         self.draw_maze()
+        
+        
         
     # Method that draws all labels on the screen according to certain characteristics and in the locations determined and passed as a parameter
     def draw_labels(self,text:str,font:pygame.font.Font, color, x:int, y:int) -> None:
@@ -204,18 +217,24 @@ class View:
         self.pick_color_btn_bg.disable()
         self.createBtn.disable()
         self.solveBtn.disable()
+        # Clear and draw the main screen
         self.clear_screen()
         self.draw_maze()
 
+        counter:int = 0 # Count the iterations until reaching the final solution or solutions
+        # Controller method that returns a color different from the 4 that we passed as a parameter, and this will be the color in which we will draw the solution/s
         solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,pygame.Color("green"),pygame.Color("red"))
-        
+        start = time.perf_counter()
         self.view_controller.first_fase_algorithm()
         running:bool = True
+        # Ciclo que iremos iterar ate o metodo ""
         while running:
             return_value:Union['Cell',list,None] = self.view_controller.second_fase_breadth()
             if isinstance(return_value, list):
+                self.generate_algorithm_time = round(time.perf_counter() - start - (counter*0.100), 4) # end - start - times that we use the delay time
                 self.clear_screen()
                 self.draw_maze()
+                self.draw_labels(f"Breadth Algorithm Solution time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,200,0)
                 for solution in return_value:
                     for cell in solution[1:-1]:
                         self.draw_solution(cell, self.current_color_bg, self.current_color_wls, solution_color)
@@ -225,9 +244,11 @@ class View:
                     self.draw_cell(cell,"red",self.current_color_wls)
                 pygame.display.update()
             elif return_value is None:
+                counter+=1
                 continue
             else:   
                 self.draw_solution(return_value, self.current_color_bg, self.current_color_wls, solution_color)
+                counter+=1
                 pygame.time.delay(100)
                 pygame.display.update()
     
