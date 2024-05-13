@@ -50,42 +50,43 @@ class View:
         self.current_color_wls:pygame.color = pygame.Color(255,140,0)
         # (screen where the button will be drawn, button x position, button y position, button width, button height, button radius, button text, text font size,
         # margin around text, button color when inactive, button color when mouse hovers over, button color when clicked, function to be called when button is clicked, button background image) 
-        self.pick_color_btn_wls:Button = Button(self.screen,self.screen_width-192,165,100,35,radius=50,text='Pick color!',fontSize=20,margin=20,inactiveColour='red',hoverColour='green', pressedColour='black',onClick=self.pick_color_btn_wls_click)
+        pickColor_img:pygame.image = pygame.image.load("src/images/pickColor.png").convert()
+        self.pick_color_btn_wls = Button(self.screen, self.screen_width-192, 165, 100, 35, radius=0, onClick=self.pick_color_btn_wls_click, image=pygame.transform.scale(pickColor_img,(100,35)))
         self.rect_wls:pygame.rect = pygame.draw.rect(self.screen, self.current_color_wls, (self.screen_width-57, 165, 35, 35))
         # Draw text in view
         self.draw_labels("Background color :", self.text_font,self.color_black,self.screen_width-353,220)
         self.current_color_bg:pygame.color = pygame.Color(0,0,0)
-        self.pick_color_btn_bg:Button = Button(self.screen,self.screen_width-192,215,100,35,radius=50,text='Pick color!',fontSize=20,margin=20,inactiveColour='red',hoverColour='green', pressedColour='black',onClick=self.pick_color_btn_bg_click)
+        self.pick_color_btn_bg = Button(self.screen, self.screen_width-192, 215, 100, 35, radius=0, onClick=self.pick_color_btn_bg_click, image=pygame.transform.scale(pickColor_img,(100,35)))
         self.rect_bg:pygame.rect = pygame.draw.rect(self.screen, self.current_color_bg, (self.screen_width-57, 215, 35, 35))
         
         # Design of the 4 main simulator buttons (Create, Solve, Clear, Save)
         # The background of each button will be an image created by us
-        create_Btn_img:pygame.image = pygame.image.load("src/images/teste.png").convert()
+        create_Btn_img:pygame.image = pygame.image.load("src/images/botaocreate.png").convert()
         self.createBtn = Button(self.screen, self.screen_width-370, 285, 175, 60, radius=0, onClick=self.create_btn_click, image=pygame.transform.scale(create_Btn_img,(175,60)))
         
-        solve_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
+        solve_Btn_img:pygame.image = pygame.image.load("src/images/botaosolve.png").convert()   
         self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.clear_screen, image=pygame.transform.scale(solve_Btn_img,(175,60)))
         
-        clear_Btn_img:pygame.image = pygame.image.load("src/images/button_create.png").convert()   
+        clear_Btn_img:pygame.image = pygame.image.load("src/images/botaoclear.png").convert()   
         self.clearBtn = Button(self.screen, self.screen_width-370, 365, 175, 60, radius=0, onClick=self.clear_btn_click, image=pygame.transform.scale(clear_Btn_img,(175,60)))
         
-        save_Btn_img:pygame.image = pygame.image.load("src/images/button_solve.png").convert()   
+        save_Btn_img:pygame.image = pygame.image.load("src/images/botaosave.png").convert()   
         self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.save_btn_click, image=pygame.transform.scale(save_Btn_img,(175,60)))
         # Draw text in view
         self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
         
         # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
         # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
-        lsBtn:pygame.image = pygame.image.load("src/images/button_clear-maze.png").convert()  
+        lsBtn:pygame.image = pygame.image.load("src/images/Lsearch.png").convert()  
         self.lsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(lsBtn,(175,60)))
 
-        brBtn:pygame.image = pygame.image.load("src/images/button_breadth-algorithm.png").convert()  
+        brBtn:pygame.image = pygame.image.load("src/images/breadthSearch.png").convert()  
         self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.breadthBtn_click, image=pygame.transform.scale(brBtn,(175,60)))
 
-        daBtn:pygame.image = pygame.image.load("src/images/button_depth-algorithm.png").convert()  
+        daBtn:pygame.image = pygame.image.load("src/images/depthSearch.png").convert()  
         self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(daBtn,(175,60)))
 
-        asBtn:pygame.image = pygame.image.load("src/images/button_a-search-algorithm.png").convert()  
+        asBtn:pygame.image = pygame.image.load("src/images/ASearch.png").convert()  
         self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(asBtn,(175,60)))
         
         pygame.display.update()#updates the display
@@ -148,8 +149,7 @@ class View:
     def generate_maze(self)->None:
         start = time.perf_counter()
         self.grid_maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
-        end = time.perf_counter()
-        self.generate_maze_time = round(start - end, 4)
+        self.generate_maze_time = round(time.perf_counter() - start, 4)
         self.draw_maze()
         
         
@@ -227,26 +227,28 @@ class View:
         start = time.perf_counter()
         self.view_controller.first_fase_algorithm()
         running:bool = True
-        # Ciclo que iremos iterar ate o metodo ""
+        # Cycle that we will iterate until the "second_fase_breadth" method returns a list of possible solutions in this maze with this algorithm
         while running:
             return_value:Union['Cell',list,None] = self.view_controller.second_fase_breadth()
             if isinstance(return_value, list):
                 self.generate_algorithm_time = round(time.perf_counter() - start - (counter*0.100), 4) # end - start - times that we use the delay time
                 self.clear_screen()
                 self.draw_maze()
-                self.draw_labels(f"Breadth Algorithm Solution time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,200,0)
-                for solution in return_value:
+                self.draw_labels(f"Breadth Algorithm Solution time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,200,0) # Draw timer
+                # Draw the returned solutions
+                for solution in return_value: 
                     for cell in solution[1:-1]:
                         self.draw_solution(cell, self.current_color_bg, self.current_color_wls, solution_color)
                 running = False
+                # Draw again the Start and End cells because the solutions we return may have to go through a final cell to reach the second
                 self.draw_cell(self.view_controller.get_start_cell(),"green",self.current_color_wls)  
                 for cell in self.view_controller.get_end_cells():
                     self.draw_cell(cell,"red",self.current_color_wls)
                 pygame.display.update()
             elif return_value is None:
                 counter+=1
-                continue
             else:   
+                # Draw the returned cell, which is the cell that was explored, and give the program a delay of 100 milliseconds so that it is clear to the user how the algorithm is exploring
                 self.draw_solution(return_value, self.current_color_bg, self.current_color_wls, solution_color)
                 counter+=1
                 pygame.time.delay(100)
