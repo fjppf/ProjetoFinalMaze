@@ -149,6 +149,13 @@ class Maze:
         self.set_queue(deque())
         self.set_next_cell(None)
         self.set_paths([])
+    
+    # Method that resets all variables used in the depth search method
+    def clear_depth_variables(self) -> None:
+        self.set_current_cell(None)
+        self.set_stack([])
+        self.set_next_cell(None)
+        self.set_paths([])
         
     # Method of the Breadth algorithm that aims to save the atual solution
     def save_solution(self):

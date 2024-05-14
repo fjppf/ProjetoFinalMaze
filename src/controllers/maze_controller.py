@@ -44,17 +44,24 @@ class MazeController:
                 if self.cell_controller.get_x(cell) == x and self.cell_controller.get_y(cell) == y: return cell
         return None
     
-    # Method that sees which neighbors are available and chooses one to follow
-    def check_neighbors_generate_maze(self,cell:'Cell') -> 'Cell':
-        neighbors:list = []
+    # Method that find the neighbors if they exist around the cell
+    def find_neighbors(self,cell:'Cell')->list['Cell']:
         # Check the top neighbor
-        top:'Cell' = self.check_cell(self.cell_controller.get_x(cell), self.cell_controller.get_y(cell) - 1)
+        top:'Cell' = self.check_cell(self.cell_controller.get_x(cell), self.cell_controller.get_y(cell)-1)
         # Check the right neighbor
         right:'Cell' = self.check_cell(self.cell_controller.get_x(cell) + 1, self.cell_controller.get_y(cell))
         # Check the bottom neighbor
         bottom:'Cell' = self.check_cell(self.cell_controller.get_x(cell), self.cell_controller.get_y(cell) + 1)
         # Check the left neighbor
         left:'Cell' = self.check_cell(self.cell_controller.get_x(cell) - 1, self.cell_controller.get_y(cell))
+        return (top,right,bottom,left)
+        
+    
+    # Method that sees which neighbors are available and chooses one to follow
+    def check_neighbors_generate_maze(self,cell:'Cell') -> 'Cell':
+        neighbors:list = []
+        # Neighbors
+        top,right,bottom,left = self.find_neighbors(cell)
 
         # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
         # gets added to the list.
@@ -138,7 +145,7 @@ class MazeController:
         self.maze.set_current_cell(self.maze.remove_queue())
         self.cell_controller.set_visited(self.maze.get_current_cell(),True) # Mark the current cell as visited
         # We get all the neighbors that have not yet been visited of the current cell
-        self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_breadth_algorithm(self.maze.get_current_cell()))
+        self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_algorithms(self.maze.get_current_cell()))
         #This piece of code creates all possible paths from the current cell in the maze. If more than one neighbor is available, we add the first neighbor to the existing path. 
         # For subsequent neighbors, we copy the current path, excluding the last element (which is already the current neighbor), and add the neighbor under consideration. 
         # This process is repeated for each neighbor, ensuring that we explore all path options from the current cell.        
@@ -171,17 +178,9 @@ class MazeController:
             return self.maze.get_solutions()  # return solutions
     
     # Method that sees which neighbors are available and chooses one to follow
-    def check_neighbors_breadth_algorithm(self,cell:'Cell') -> 'Cell':
+    def check_neighbors_algorithms(self,cell:'Cell') -> 'Cell':
         neighbors:list['Cell'] = []
-        # Check the top neighbor
-        top:'Cell' = self.check_cell(self.cell_controller.get_x(cell), self.cell_controller.get_y(cell)-1)
-        # Check the right neighbor
-        right:'Cell' = self.check_cell(self.cell_controller.get_x(cell) + 1, self.cell_controller.get_y(cell))
-        # Check the bottom neighbor
-        bottom:'Cell' = self.check_cell(self.cell_controller.get_x(cell), self.cell_controller.get_y(cell) + 1)
-        # Check the left neighbor
-        left:'Cell' = self.check_cell(self.cell_controller.get_x(cell) - 1, self.cell_controller.get_y(cell))
-
+        top,right,bottom,left = self.find_neighbors(cell) # Neighbors
         # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
         # gets added to the list.
         if top and not self.cell_controller.get_visited(top) and not self.cell_controller.get_wall(top,"bottom"):
@@ -194,13 +193,15 @@ class MazeController:
             neighbors.append(left)
         return neighbors
     
+    # Method that starts the Depth Search algorithm
     def first_fase_depth(self) -> None:
         self.maze.set_solutions([]) # Clear the solutions variable
-        self.maze.set_current_cell(self.maze.get_grid()[0][0])
+        self.maze.set_current_cell(self.get_start_cell())
+        self.maze.add_paths([self.get_start_cell()]) # add to path list
     
     def second_fase_depth(self):
         self.cell_controller.set_visited(self.maze.get_current_cell(),True) # Mark the current cell as visited
-        self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_generate_maze(self.maze.get_current_cell())) # Assigns its neighbors to the cell
+        self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_algorithms(self.maze.get_current_cell())) # Assigns its neighbors to the cell
         # Get the next unvisited neighbor. If there is more than one we choose randomly
         self.maze.set_next_cell(choice(self.cell_controller.get_neighbors(self.maze.get_current_cell()))) if self.cell_controller.get_neighbors(self.maze.get_current_cell()) else self.maze.set_next_cell(None)
         if self.maze.get_next_cell(): # If there is an unvisited neighbor
@@ -210,10 +211,19 @@ class MazeController:
             self.maze.set_current_cell(self.maze.get_next_cell())  # Move to the next cell
         elif self.maze.get_stack(): # If the stack is not empty
             self.maze.set_current_cell(self.maze.remove_stack()) # Move back to the previous cell
-            self.maze.set_paths(self.maze.get_paths()[0][0:self.maze.get_paths()[0].index(self.maze.get_current_cell())])
+            self.maze.set_paths([self.maze.get_paths()[0][0:self.maze.get_paths()[0].index(self.maze.get_current_cell())+1]])
+            return None
         else:
             return self.maze.get_solutions()
         
-        if self.maze.get_next_cell() in self.maze.get_end_cells():
-            pass
+        if self.maze.get_current_cell() in self.maze.get_end_cells():
+            self.maze.save_solution()
+            # If all the necessary solutions have already been found, then we return these
+            if len(self.maze.get_solutions()) == len(self.maze.get_end_cells()):
+                self.clear_visited_attribute() # Clear all visited attributes
+                self.maze.clear_depth_variables()
+                return self.maze.get_solutions()
             return None
+        else:
+            return self.maze.get_current_cell()
+        

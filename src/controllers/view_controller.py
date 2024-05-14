@@ -24,8 +24,6 @@ class ViewController:
         except ValueError:
             return ("Write only integers","Write only integers")
        
-        
-    
     # Method that returns the starting cell
     def get_start_cell(self) -> 'Cell':
         return self.maze_controller.get_start_cell()
@@ -50,16 +48,16 @@ class ViewController:
     def get_wall(self,cell:'Cell',direction:str) -> str:
         return self.cell_controller.get_wall(cell,direction)
     
+    # Method that aims to call the function in the color_picker window controller that opens it
+    def open_color_picker(self,screen:pygame.display,ui_manager:pygame_gui.ui_manager,current_color:pygame.color) -> pygame.color:
+        self.picker_color_controller:PickerViewController = PickerViewController()
+        return self.picker_color_controller.open_color_picker(screen,ui_manager,current_color)
+    
     # Method that contacts the maze controller to tell it to generate the maze
     def generate_maze(self,rows:int,cols:int) -> list[list['Cell']]: 
         self.maze_controller.set_grid(rows,cols) # Method that creates the grid
         self.grid_maze:list[list['Cell']] = self.maze_controller.generate_maze() # Method that creates the maze in the grid created above
         return self.grid_maze
-    
-    # Method that aims to call the function in the color_picker window controller that opens it
-    def open_color_picker(self,screen:pygame.display,ui_manager:pygame_gui.ui_manager,current_color:pygame.color) -> pygame.color:
-        self.picker_color_controller:PickerViewController = PickerViewController()
-        return self.picker_color_controller.open_color_picker(screen,ui_manager,current_color)
     
     # Method that allows you to save the current maze in png format
     def save_maze(self,screen:pygame.display) -> None:
@@ -91,8 +89,15 @@ class ViewController:
                             return new_color
             
     # Methods for the Breadth algorithm
-    def first_fase_algorithm(self) -> None:
+    def first_fase_breadth(self) -> None:
         self.maze_controller.first_fase_breadth()
     
-    def second_fase_breadth(self) -> Union['Cell',list]:
+    def second_fase_breadth(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_breadth()
+    
+    # Methods for the Depth algorithm
+    def first_fase_depth(self) -> None:
+        self.maze_controller.first_fase_depth()
+    
+    def second_fase_depth(self) -> Union['Cell',list,None]:
+        return self.maze_controller.second_fase_depth()
