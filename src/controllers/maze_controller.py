@@ -214,6 +214,8 @@ class MazeController:
             self.maze.set_paths([self.maze.get_paths()[0][0:self.maze.get_paths()[0].index(self.maze.get_current_cell())+1]])
             return None
         else:
+            self.clear_visited_attribute() # Clear all visited attributes
+            self.maze.clear_depth_variables()
             return self.maze.get_solutions()
         
         if self.maze.get_current_cell() in self.maze.get_end_cells():

@@ -16,8 +16,8 @@ class ViewController:
     def check_inputs(self,rows:str,columns:str,width:int,height:int):
         try:
             #valid min columns = left margin + 5 * cell_size  || valid min height = top margin + 5 * cell_size
-            if int(columns) < 5 and int(rows) < 5:
-                return ("Min columns:5","Min rows:5")
+            if int(columns) < 7 and int(rows) < 7:
+                return ("Min columns:7","Min rows:7")
             else:
                 #valid max columns = width - right elements - left and right margins  || valid max height = height - top margin - bottom margin
                 return () if int(columns)<=(width - 370 - 40) // 20 and int(rows)<=(height - 20 - 80) // 20 else (f"Max Columns:{(width - 370 - 40) // 20}",f"Max rows:{(height - 20 - 80) // 20}")
@@ -63,7 +63,7 @@ class ViewController:
     def save_maze(self,screen:pygame.display) -> None:
         pygame.display.flip()
         # We create a surface that represents the area to capture
-        size:tuple = self.maze_controller.get_px_size_maze() # Get the size of the maze with margins
+        size:tuple = self.get_px_size_maze() # Get the size of the maze with margins
         capture_surface:pygame.Surface = pygame.Surface(size)
         # Capture the screen area, excluding the button part
         capture_surface.blit(screen, (0, 0), pygame.Rect(0, 0, size[0], size[1]))
@@ -73,6 +73,10 @@ class ViewController:
         pygame.image.save(capture_surface,os.path.join(folder_images, self.maze_controller.get_save_name_maze()))
         # Wait for the image to be saved
         pygame.time.delay(500)
+    
+    # Method that will call the method in the maze controller and that will return a tuple with the size of the maze
+    def get_px_size_maze(self)->tuple:
+        return self.maze_controller.get_px_size_maze()
     
     # Method to obtain a different color from the background and walls of the maze
     def get_different_color(self,color1: pygame.Color, color2: pygame.Color, color3: pygame.Color, color4: pygame.Color) -> pygame.Color:

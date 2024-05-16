@@ -251,7 +251,7 @@ class View:
                 self.generate_algorithm_time = round(time.time() - start - (counter*0.100), 4) # end - start - times that we use the delay time
                 self.clear_screen()
                 self.draw_maze()
-                self.draw_labels(f"{algorithm_name} Solution time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,200,0) # Draw timer
+                self.draw_labels(f"{algorithm_name} time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,20,self.view_controller.get_px_size_maze()[1]-20) # Draw timer
                 # Draw the returned solutions
                 for solution in return_value: 
                     for cell in solution[1:-1]:

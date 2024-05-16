@@ -72,6 +72,8 @@ class Maze:
         self.paths.append(list)
     
     def add_element_path(self,cell:'Cell',element:'Cell')->None:
+        if len(self.get_paths()) ==2:
+            pass
         for path in self.get_paths():
             if path[-1] == cell:
                 path.append(element)
