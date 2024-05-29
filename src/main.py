@@ -11,6 +11,7 @@ from views.view import View
 def main() -> None:
     # Initializes all parts of Pygame modules that are necessary to start the application. This includes initializing the video subsystem, sound, fonts, etc.
     pygame.init()
+    
     # Call the main view of the program
     View()
     

@@ -10,6 +10,10 @@ from controllers.view_controller import ViewController
 class View:
     # Class constructor
     def __init__(self) -> None:
+
+        # Define the icon for the window
+        pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
+        
         self.view_controller:ViewController = ViewController()
         
         # Variables for timers
