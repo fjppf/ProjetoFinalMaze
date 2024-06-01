@@ -91,7 +91,7 @@ class View:
         self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.depthBtn_click, image=pygame.transform.scale(daBtn,(175,60)))
 
         asBtn:pygame.image = pygame.image.load("src/images/ASearch.png").convert()  
-        self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(asBtn,(175,60)))
+        self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.asearchBtn_click, image=pygame.transform.scale(asBtn,(175,60)))
         
         pygame.display.update()#updates the display
     
@@ -135,7 +135,6 @@ class View:
         if self.view_controller.get_wall(cell,'left'):
             pygame.draw.line(self.screen, pygame.Color(wl_color), (self.view_controller.get_x_cell(cell) * self.view_controller.get_size_cell(cell), (self.view_controller.get_y_cell(cell) + 1) * self.view_controller.get_size_cell(cell)), (self.view_controller.get_x_cell(cell) * self.view_controller.get_size_cell(cell), self.view_controller.get_y_cell(cell) * self.view_controller.get_size_cell(cell)))
 
-    
     # The method that aims to draw the entire maze on the screen also uses the "draw_cell" method
     def draw_maze(self) -> None:
         self.clear_screen()        
@@ -219,61 +218,23 @@ class View:
         self.pick_color_btn_bg.disable()
         self.createBtn.disable()
         self.solveBtn.disable()
-        self.handle_algorithms(self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,"Breadth Algorithm")
+        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,"Breadth Algorithm")
     
     # Method called when clicking on the secondary button for the Depth First Search algorithm
     def depthBtn_click(self) -> None:
-        # Disable all other buttons except the secondary buttons and clear or save button.
+        # Disable all other buttons except the secondary buttons and clear or save button. ##########################
         self.pick_color_btn_wls.disable()
         self.pick_color_btn_bg.disable()
         self.createBtn.disable()
         self.solveBtn.disable()
-        self.handle_algorithms(self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,"Depth Algorithm")
+        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,"Depth Algorithm")
         
-    
     # Method called when clicking on the secondary button for the A* Search algorithm
     def asearchBtn_click(self) -> None:
-        pass
-    
-    
-    # Method that we use to iterate in Breadth and Depth algorithms
-    def handle_algorithms(self, first_phase_method, second_phase_method, algorithm_name):
-        # Clear and draw the main screen
-        self.clear_screen()
-        self.draw_maze()
+        # Disable all other buttons except the secondary buttons and clear or save button. ########################
+        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_A,self.view_controller.second_fase_A,"A* Algorithm")
 
-        counter:int = 0 # Count the iterations until reaching the final solution or solutions
-        # Controller method that returns a color different from the 4 that we passed as a parameter, and this will be the color in which we will draw the solution/s
-        solution_color:pygame.color = self.view_controller.get_different_color(self.current_color_bg,self.current_color_wls,pygame.Color("green"),pygame.Color("red"))
-        start = time.time()
-        first_phase_method()
-        running:bool = True
-        # Cycle that we will iterate until the "second_fase_breadth" method returns a list of possible solutions in this maze with this algorithm
-        while running:
-            return_value:Union['Cell',list,None] = second_phase_method()
-            if isinstance(return_value, list):
-                self.generate_algorithm_time = round(time.time() - start - (counter*0.100), 4) # end - start - times that we use the delay time
-                self.clear_screen()
-                self.draw_maze()
-                self.draw_labels(f"{algorithm_name} time: {self.generate_algorithm_time}", pygame.font.SysFont("Arial",15),self.color_black,20,self.view_controller.get_px_size_maze()[1]-20) # Draw timer
-                # Draw the returned solutions
-                for solution in return_value: 
-                    for cell in solution[1:-1]:
-                        self.draw_solution(cell, self.current_color_bg, self.current_color_wls, solution_color)
-                running = False
-                # Draw again the Start and End cells because the solutions we return may have to go through a final cell to reach the second
-                self.draw_cell(self.view_controller.get_start_cell(),"green",self.current_color_wls)  
-                for cell in self.view_controller.get_end_cells():
-                    self.draw_cell(cell,"red",self.current_color_wls)
-                pygame.display.update()
-            elif return_value is None:
-                continue
-            else:   
-                # Draw the returned cell, which is the cell that was explored, and give the program a delay of 100 milliseconds so that it is clear to the user how the algorithm is exploring
-                self.draw_solution(return_value, self.current_color_bg, self.current_color_wls, solution_color)
-                counter+=1
-                pygame.time.delay(100)
-                pygame.display.update()
+
     
 
     

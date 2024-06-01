@@ -1,5 +1,6 @@
 import os
 import random
+import time
 import pygame
 import pygame_gui.ui_manager
 from typing import Union
@@ -23,7 +24,16 @@ class ViewController:
                 return () if int(columns)<=(width - 370 - 40) // 20 and int(rows)<=(height - 20 - 80) // 20 else (f"Max Columns:{(width - 370 - 40) // 20}",f"Max rows:{(height - 20 - 80) // 20}")
         except ValueError:
             return ("Write only integers","Write only integers")
-       
+    
+    
+    ############################# *** POSSO ACEDER DIRETAMENTE AO CAMPO OU TENHO DE USAR AS FUNCOES ABAIXO?? *** ##################################
+    ###############################################################################################################################################
+                                                # self.maze_controller.get_start_cell()
+                                                #######################################
+                                                ############### OU ####################
+                                                #######################################
+                                                ### a FUNCAO ABAIXO
+    
     # Method that returns the starting cell
     def get_start_cell(self) -> 'Cell':
         return self.maze_controller.get_start_cell()
@@ -91,7 +101,48 @@ class ViewController:
                         # Check if the new color is sufficiently different from color4
                         if all(abs(new_color[i] - color4[i]) > 50 for i in range(3)):
                             return new_color
-            
+    
+    
+    # Method that we use to iterate in Breadth and Depth algorithms
+    def handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable, algorithm_name:str):
+        # Clear and draw the main screen
+        view.clear_screen()
+        view.draw_maze()
+
+        counter:int = 0 # Count the iterations until reaching the final solution or solutions
+        # Controller method that returns a color different from the 4 that we passed as a parameter, and this will be the color in which we will draw the solution/s
+        solution_color:pygame.color = self.get_different_color(view.current_color_bg,view.current_color_wls,pygame.Color("green"),pygame.Color("red"))
+        start = time.time()
+        first_phase_method()
+        running:bool = True
+        # Cycle that we will iterate until the "second_fase" method returns a list of possible solutions in this maze with this algorithm
+        while running:
+            return_value:Union['Cell',list,None] = second_phase_method()
+            if isinstance(return_value, list):
+                generate_algorithm_time = round(time.time() - start - (counter*0.100), 4) # end - start - times that we use the delay time
+                view.clear_screen()
+                view.draw_maze()
+                view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.get_px_size_maze()[1]-20) # Draw timer
+                # Draw the returned solutions
+                for solution in return_value: 
+                    for cell in solution[1:-1]:
+                        view.draw_solution(cell, view.current_color_bg, view.current_color_wls, solution_color)
+                running = False
+                # Draw again the Start and End cells because the solutions we return may have to go through a final cell to reach the second
+                view.draw_cell(self.get_start_cell(),"green",view.current_color_wls)  
+                for cell in self.get_end_cells():
+                    view.draw_cell(cell,"red",view.current_color_wls)
+                pygame.display.update()
+            elif return_value is None:
+                continue
+            else:   
+                # Draw the returned cell, which is the cell that was explored, and give the program a delay of 100 milliseconds so that it is clear to the user how the algorithm is exploring
+                view.draw_solution(return_value, view.current_color_bg, view.current_color_wls, solution_color)
+                counter+=1
+                pygame.time.delay(100)
+                pygame.display.update()
+    
+    
     # Methods for the Breadth algorithm
     def first_fase_breadth(self) -> None:
         self.maze_controller.first_fase_breadth()
@@ -105,3 +156,10 @@ class ViewController:
     
     def second_fase_depth(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_depth()
+    
+    # Methods for the A* algorithm
+    def first_fase_A(self) -> None:
+        self.maze_controller.first_fase_A()
+    
+    def second_fase_A(self) -> Union['Cell',list,None]:
+        return self.maze_controller.second_fase_A()

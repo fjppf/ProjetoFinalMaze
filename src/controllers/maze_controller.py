@@ -1,3 +1,4 @@
+import math
 import random
 from typing import Union
 from random import choice
@@ -199,7 +200,7 @@ class MazeController:
         self.maze.set_current_cell(self.get_start_cell())
         self.maze.add_paths([self.get_start_cell()]) # add to path list
     
-    def second_fase_depth(self):
+    def second_fase_depth(self) -> Union['Cell',None,list]:
         self.cell_controller.set_visited(self.maze.get_current_cell(),True) # Mark the current cell as visited
         self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_algorithms(self.maze.get_current_cell())) # Assigns its neighbors to the cell
         # Get the next unvisited neighbor. If there is more than one we choose randomly
@@ -215,7 +216,7 @@ class MazeController:
             return None
         else:
             self.clear_visited_attribute() # Clear all visited attributes
-            self.maze.clear_depth_variables()
+            self.maze.clear_depth_A_variables()
             return self.maze.get_solutions()
         
         if self.maze.get_current_cell() in self.maze.get_end_cells():
@@ -223,9 +224,67 @@ class MazeController:
             # If all the necessary solutions have already been found, then we return these
             if len(self.maze.get_solutions()) == len(self.maze.get_end_cells()):
                 self.clear_visited_attribute() # Clear all visited attributes
-                self.maze.clear_depth_variables()
+                self.maze.clear_depth_A_variables()
                 return self.maze.get_solutions()
             return None
         else:
             return self.maze.get_current_cell()
+        
+    
+    # Method that starts the A* Search algorithm
+    def first_fase_A(self) -> None:
+        self.maze.set_solutions([]) # Clear the solutions variable
+        self.maze.set_current_cell(self.get_start_cell())
+        self.maze.add_paths([self.get_start_cell()]) # add to path list
+
+    def second_fase_A(self) -> Union['Cell',None,list]:
+        current_cell:'Cell' = self.maze.get_current_cell()
+        self.cell_controller.set_visited(current_cell,True) # Mark the current cell as visited
+        self.cell_controller.set_neighbors(current_cell,self.check_neighbors_algorithms(current_cell)) # Assigns its neighbors to the cell
+        # Get the next unvisited neighbor. 
+        if len(self.maze.get_end_cells())==0:
+            return self.maze.get_solutions()
+        best_neighbor:'Cell' = self.discover_best_neighbor(len(self.maze.get_solutions()))
+        self.maze.set_next_cell(best_neighbor)
+        next_cell:'Cell' = self.maze.get_next_cell()
+        
+        if next_cell: # If there is an unvisited neighbor
+            self.cell_controller.set_visited(next_cell,True) # Mark the next cell as visited
+            self.maze.add_stack(current_cell) # Add the current cell to the stack
+            self.maze.add_element_path(current_cell, next_cell)
+            self.maze.set_current_cell(next_cell)  # Move to the next cell
+        elif self.maze.get_stack(): # If the stack is not empty
+            self.maze.set_current_cell(self.maze.remove_stack()) # Move back to the previous cell
+            paths:list[list] = self.maze.get_paths()
+            self.maze.set_paths([paths[0][0:paths[0].index(self.maze.get_current_cell())+1]])
+            return None
+        else:
+            self.clear_visited_attribute() # Clear all visited attributes
+            self.maze.clear_depth_A_variables() 
+            return self.maze.get_solutions()
+        
+        current_cell = self.maze.get_current_cell()
+        if current_cell in self.maze.get_end_cells():
+            self.maze.save_solution()
+            # If all the necessary solutions have already been found, then we return these
+            if len(self.maze.get_solutions()) == len(self.maze.get_end_cells()):
+                self.clear_visited_attribute() # Clear all visited attributes
+                self.maze.clear_depth_A_variables()
+                return self.maze.get_solutions()
+            return None
+        else:
+            return current_cell
+        
+    def discover_best_neighbor(self,index:int) -> Union['Cell',None]:
+        temp_value:int = 0
+        neighbor_option:Union['Cell',None] = None
+        for neighbor in self.cell_controller.get_neighbors(self.maze.get_current_cell()):
+                # Distance = √(x1-x2)^2+(y1-y2)^2
+                #value:int = math.sqrt((self.cell_controller.get_x(neighbor)-self.cell_controller.get_x(self.maze.get_end_cells()[index]))**2 + (self.cell_controller.get_y(neighbor)-self.cell_controller.get_y(self.maze.get_end_cells()[index]))**2)
+                value:int = math.sqrt(((self.cell_controller.get_x(neighbor)+10)-(self.cell_controller.get_x(self.maze.get_end_cells()[index])+10))**2 + ((self.cell_controller.get_y(neighbor)+10)-(self.cell_controller.get_y(self.maze.get_end_cells()[index])+10))**2)
+
+                if value < temp_value or temp_value==0:
+                    temp_value = value
+                    neighbor_option = neighbor
+        return neighbor_option
         

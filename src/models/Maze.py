@@ -153,7 +153,7 @@ class Maze:
         self.set_paths([])
     
     # Method that resets all variables used in the depth search method
-    def clear_depth_variables(self) -> None:
+    def clear_depth_A_variables(self) -> None:
         self.set_current_cell(None)
         self.set_stack([])
         self.set_next_cell(None)
