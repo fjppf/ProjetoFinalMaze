@@ -1,6 +1,7 @@
 # To run this code it is necessary to install some libraries before running so use the command 
 # "pip install -r requirements.txt"
 
+import threading
 import pygame
 import pygame_widgets
 import pygame_widgets.button
@@ -13,14 +14,15 @@ def main() -> None:
     pygame.init()
     
     # Call the main view of the program
-    View()
+    view = View()
     
     # Start the main loop that will keep the program running until the window is closed.
     running:bool = True
     while running:  
         events:pygame.event = pygame.event.get()  # Get all events
         for event in events:
-            if event.type == pygame.QUIT: # User clicks the window close button
+            if event.type == pygame.QUIT: # User clicks the window close button            
+                view.stop_visual_part()
                 running = False
                 break                
             
@@ -29,7 +31,8 @@ def main() -> None:
         
     pygame.quit() # Closes the program and all processes
 
-
 if __name__ == "__main__":
     main()
+    
+    
     

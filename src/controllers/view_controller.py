@@ -1,5 +1,6 @@
 import os
 import random
+import threading
 import time
 import pygame
 import pygame_gui.ui_manager
@@ -12,6 +13,8 @@ class ViewController:
     def __init__(self) -> None:
         self.maze_controller:MazeController = MazeController() # Maze controller     
         self.cell_controller:CellController = CellController() # Cell controller  
+        self.stop_handle_algorithms:threading.Event = threading.Event()
+        self.handle_algorithms_thread:threading.Thread = None
     
     # Check input rows and columns
     def check_inputs(self,rows:str,columns:str,width:int,height:int):
@@ -102,9 +105,18 @@ class ViewController:
                         if all(abs(new_color[i] - color4[i]) > 50 for i in range(3)):
                             return new_color
     
-    
+    # Method that initializes or resets the thread responsible for running the algorithms
+    def start_handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable,delete_method:callable, algorithm_name:str):
+        if self.handle_algorithms_thread and self.handle_algorithms_thread.is_alive():
+            self.stop_handle_algorithms.set()
+            self.handle_algorithms_thread.join()
+                
+        self.stop_handle_algorithms.clear()
+        self.handle_algorithms_thread = threading.Thread(target=self.handle_algorithms,args=(view, first_phase_method, second_phase_method,delete_method, algorithm_name))
+        self.handle_algorithms_thread.start()
+
     # Method that we use to iterate in Breadth and Depth algorithms
-    def handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable, algorithm_name:str):
+    def handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable,delete_method:callable, algorithm_name:str):
         # Clear and draw the main screen
         view.clear_screen()
         view.draw_maze()
@@ -115,11 +127,16 @@ class ViewController:
         start = time.time()
         first_phase_method()
         running:bool = True
+        
         # Cycle that we will iterate until the "second_fase" method returns a list of possible solutions in this maze with this algorithm
         while running:
+            # Stops the algorithm cycle and resets the used variables
+            if self.stop_handle_algorithms.is_set():
+                delete_method()
+                break
             return_value:Union['Cell',list,None] = second_phase_method()
-            if isinstance(return_value, list):
-                generate_algorithm_time = round(time.time() - start - (counter*0.100), 4) # end - start - times that we use the delay time
+            if isinstance(return_value, list):   # The returned value is the list of solutions
+                generate_algorithm_time:int = round(time.time() - start - (counter*0.100), 4) # end - start - times that we use the delay time
                 view.clear_screen()
                 view.draw_maze()
                 view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.get_px_size_maze()[1]-20) # Draw timer
@@ -133,15 +150,14 @@ class ViewController:
                 for cell in self.get_end_cells():
                     view.draw_cell(cell,"red",view.current_color_wls)
                 pygame.display.update()
-            elif return_value is None:
+            elif return_value is None:   # The returned value is one of the end cells, so the method returned None
                 continue
-            else:   
+            else:   # The returned value is a cell
                 # Draw the returned cell, which is the cell that was explored, and give the program a delay of 100 milliseconds so that it is clear to the user how the algorithm is exploring
                 view.draw_solution(return_value, view.current_color_bg, view.current_color_wls, solution_color)
                 counter+=1
                 pygame.time.delay(100)
-                pygame.display.update()
-    
+        
     
     # Methods for the Breadth algorithm
     def first_fase_breadth(self) -> None:
@@ -150,12 +166,18 @@ class ViewController:
     def second_fase_breadth(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_breadth()
     
+    def delete_breadth(self) -> None:
+        self.maze_controller.delete_breadth()
+    
     # Methods for the Depth algorithm
     def first_fase_depth(self) -> None:
         self.maze_controller.first_fase_depth()
     
     def second_fase_depth(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_depth()
+
+    def delete_depth_A(self) -> None:
+        self.maze_controller.delete_depth_A()
     
     # Methods for the A* algorithm
     def first_fase_A(self) -> None:
@@ -163,3 +185,9 @@ class ViewController:
     
     def second_fase_A(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_A()
+    
+    # Method that stops the visual part of the program before closing the program
+    def stop_visual_part(self) -> None:
+        self.stop_handle_algorithms.set()
+        self.handle_algorithms_thread.join()
+    

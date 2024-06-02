@@ -84,7 +84,6 @@ class MazeController:
             for col in range(0,self.maze.get_cols()):
                 self.cell_controller.set_visited(temp_grid[row][col],False)
         self.maze.set_grid(temp_grid)
-        del temp_grid # Free memory by deleting temporary variable
         
     # Method that will generate the maze itself 
     def generate_maze(self) -> 'Maze':
@@ -134,6 +133,24 @@ class MazeController:
     # Get a valid name to save the maze
     def get_save_name_maze(self) -> str:
         return f"Maze {self.maze.get_cols()}x{self.maze.get_rows()}_{random.randint(0, 1000)}.png"
+    
+    
+    # Method that sees which neighbors are available and chooses one to follow
+    def check_neighbors_algorithms(self,cell:'Cell') -> 'Cell':
+        neighbors:list['Cell'] = []
+        top,right,bottom,left = self.find_neighbors(cell) # Neighbors
+        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
+        # gets added to the list.
+        if top and not self.cell_controller.get_visited(top) and not self.cell_controller.get_wall(top,"bottom"):
+            neighbors.append(top)
+        if right and not self.cell_controller.get_visited(right) and not self.cell_controller.get_wall(right,"left"):
+            neighbors.append(right)
+        if bottom and not self.cell_controller.get_visited(bottom) and not self.cell_controller.get_wall(bottom,"top"): 
+            neighbors.append(bottom)
+        if left and not self.cell_controller.get_visited(left) and not self.cell_controller.get_wall(left,"right"): 
+            neighbors.append(left)
+        return neighbors
+      
         
     # Method that starts the Breadth Search algorithm
     def first_fase_breadth(self) -> None:
@@ -145,9 +162,11 @@ class MazeController:
     def second_fase_breadth(self) -> Union['Cell',None,list]:
         self.maze.set_current_cell(self.maze.remove_queue())
         self.cell_controller.set_visited(self.maze.get_current_cell(),True) # Mark the current cell as visited
+        
         # We get all the neighbors that have not yet been visited of the current cell
         self.cell_controller.set_neighbors(self.maze.get_current_cell(),self.check_neighbors_algorithms(self.maze.get_current_cell()))
-        #This piece of code creates all possible paths from the current cell in the maze. If more than one neighbor is available, we add the first neighbor to the existing path. 
+        
+        # This piece of code creates all possible paths from the current cell in the maze. If more than one neighbor is available, we add the first neighbor to the existing path. 
         # For subsequent neighbors, we copy the current path, excluding the last element (which is already the current neighbor), and add the neighbor under consideration. 
         # This process is repeated for each neighbor, ensuring that we explore all path options from the current cell.        
         for neighbor_cell in self.cell_controller.get_neighbors(self.maze.get_current_cell()):
@@ -178,21 +197,11 @@ class MazeController:
             self.maze.clear_breadth_variables() # Clear all variables used
             return self.maze.get_solutions()  # return solutions
     
-    # Method that sees which neighbors are available and chooses one to follow
-    def check_neighbors_algorithms(self,cell:'Cell') -> 'Cell':
-        neighbors:list['Cell'] = []
-        top,right,bottom,left = self.find_neighbors(cell) # Neighbors
-        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
-        # gets added to the list.
-        if top and not self.cell_controller.get_visited(top) and not self.cell_controller.get_wall(top,"bottom"):
-            neighbors.append(top)
-        if right and not self.cell_controller.get_visited(right) and not self.cell_controller.get_wall(right,"left"):
-            neighbors.append(right)
-        if bottom and not self.cell_controller.get_visited(bottom) and not self.cell_controller.get_wall(bottom,"top"): 
-            neighbors.append(bottom)
-        if left and not self.cell_controller.get_visited(left) and not self.cell_controller.get_wall(left,"right"): 
-            neighbors.append(left)
-        return neighbors
+    # Method that clean the variables used in the respective algorithm
+    def delete_breadth(self) -> None:
+        self.maze.clear_breadth_variables()
+        self.clear_visited_attribute()
+    
     
     # Method that starts the Depth Search algorithm
     def first_fase_depth(self) -> None:
@@ -229,7 +238,11 @@ class MazeController:
             return None
         else:
             return self.maze.get_current_cell()
-        
+    
+    # Method that clean the variables used in the Depth and A* algorithms  
+    def delete_depth_A(self) -> None:
+        self.clear_visited_attribute()
+        self.maze.clear_depth_A_variables()
     
     # Method that starts the A* Search algorithm
     def first_fase_A(self) -> None:
@@ -274,15 +287,15 @@ class MazeController:
             return None
         else:
             return current_cell
-        
+    
+    # Method that will discover wich neighbor is closest to the end cell   
     def discover_best_neighbor(self,index:int) -> Union['Cell',None]:
         temp_value:int = 0
         neighbor_option:Union['Cell',None] = None
         for neighbor in self.cell_controller.get_neighbors(self.maze.get_current_cell()):
                 # Distance = √(x1-x2)^2+(y1-y2)^2
-                #value:int = math.sqrt((self.cell_controller.get_x(neighbor)-self.cell_controller.get_x(self.maze.get_end_cells()[index]))**2 + (self.cell_controller.get_y(neighbor)-self.cell_controller.get_y(self.maze.get_end_cells()[index]))**2)
                 value:int = math.sqrt(((self.cell_controller.get_x(neighbor)+10)-(self.cell_controller.get_x(self.maze.get_end_cells()[index])+10))**2 + ((self.cell_controller.get_y(neighbor)+10)-(self.cell_controller.get_y(self.maze.get_end_cells()[index])+10))**2)
-
+                # If the actual neighbor is closest to the end cell we replace
                 if value < temp_value or temp_value==0:
                     temp_value = value
                     neighbor_option = neighbor

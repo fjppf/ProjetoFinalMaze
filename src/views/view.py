@@ -218,7 +218,7 @@ class View:
         self.pick_color_btn_bg.disable()
         self.createBtn.disable()
         self.solveBtn.disable()
-        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,"Breadth Algorithm")
+        self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,self.view_controller.delete_breadth,"Breadth Algorithm")
     
     # Method called when clicking on the secondary button for the Depth First Search algorithm
     def depthBtn_click(self) -> None:
@@ -227,13 +227,16 @@ class View:
         self.pick_color_btn_bg.disable()
         self.createBtn.disable()
         self.solveBtn.disable()
-        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,"Depth Algorithm")
+        self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,self.view_controller.delete_depth_A,"Depth Algorithm")
         
     # Method called when clicking on the secondary button for the A* Search algorithm
     def asearchBtn_click(self) -> None:
         # Disable all other buttons except the secondary buttons and clear or save button. ########################
-        self.view_controller.handle_algorithms(self,self.view_controller.first_fase_A,self.view_controller.second_fase_A,"A* Algorithm")
+        self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_A,self.view_controller.second_fase_A,self.view_controller.delete_depth_A,"A* Algorithm")
 
+    # Method that calls the method in view_controller file that will stops the visual part of the program
+    def stop_visual_part(self) -> None:
+        self.view_controller.stop_visual_part()
 
     
 
