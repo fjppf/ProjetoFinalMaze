@@ -100,8 +100,11 @@ class Maze:
     def add_stack(self,cell:'Cell')->None:
         self.stack.append(cell)
         
-    def remove_stack(self)->'Cell':
+    def pop_stack(self)->'Cell':
         return self.stack.pop()
+    
+    def remove_stack(self,element:'Cell')-> None:
+        self.stack.remove(element)
     
     # queue attribute getter, setter and other methods
     def get_queue(self)->deque:
