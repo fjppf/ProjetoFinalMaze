@@ -28,15 +28,6 @@ class ViewController:
         except ValueError:
             return ("Write only integers","Write only integers")
     
-    
-    ############################# *** POSSO ACEDER DIRETAMENTE AO CAMPO OU TENHO DE USAR AS FUNCOES ABAIXO?? *** ##################################
-    ###############################################################################################################################################
-                                                # self.maze_controller.get_start_cell()
-                                                #######################################
-                                                ############### OU ####################
-                                                #######################################
-                                                ### a FUNCAO ABAIXO
-    
     # Method that returns the starting cell
     def get_start_cell(self) -> 'Cell':
         return self.maze_controller.get_start_cell()
@@ -76,7 +67,7 @@ class ViewController:
     def save_maze(self,screen:pygame.display) -> None:
         pygame.display.flip()
         # We create a surface that represents the area to capture
-        size:tuple = self.get_px_size_maze() # Get the size of the maze with margins
+        size:tuple = self.maze_controller.get_px_size_maze() # Get the size of the maze with margins
         capture_surface:pygame.Surface = pygame.Surface(size)
         # Capture the screen area, excluding the button part
         capture_surface.blit(screen, (0, 0), pygame.Rect(0, 0, size[0], size[1]))
@@ -86,10 +77,6 @@ class ViewController:
         pygame.image.save(capture_surface,os.path.join(folder_images, self.maze_controller.get_save_name_maze()))
         # Wait for the image to be saved
         pygame.time.delay(500)
-    
-    # Method that will call the method in the maze controller and that will return a tuple with the size of the maze
-    def get_px_size_maze(self)->tuple:
-        return self.maze_controller.get_px_size_maze()
     
     # Method to obtain a different color from the background and walls of the maze
     def get_different_color(self,color1: pygame.Color, color2: pygame.Color, color3: pygame.Color, color4: pygame.Color) -> pygame.Color:
@@ -124,33 +111,40 @@ class ViewController:
         view.draw_maze()
 
         counter:int = 0 # Count the iterations until reaching the final solution or solutions
+        
         # Controller method that returns a color different from the 4 that we passed as a parameter, and this will be the color in which we will draw the solution/s
         solution_color:pygame.color = self.get_different_color(view.current_color_bg,view.current_color_wls,pygame.Color("green"),pygame.Color("red"))
-        start = time.time()
+        
+        start:float = time.time()
         first_phase_method()
         running:bool = True
-        
+                
         # Cycle that we will iterate until the "second_fase" method returns a list of possible solutions in this maze with this algorithm
         while running:
             # Stops the algorithm cycle and resets the used variables
             if self.stop_handle_algorithms.is_set():
                 delete_method()
                 break
+            
+            # Execute the second phase of the algorithm passed
             return_value:Union['Cell',list,None] = second_phase_method()
+            
             if isinstance(return_value, list):   # The returned value is the list of solutions
                 generate_algorithm_time:int = abs(round(time.time() - start - (counter*0.100), 4)) # end - start - times that we use the delay time
                 view.clear_screen()
                 view.draw_maze()
-                view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.get_px_size_maze()[1]-20) # Draw timer
+                view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20) # Draw timer
                 # Draw the returned solutions
                 for solution in return_value: 
                     for cell in solution[1:-1]:
                         view.draw_solution(cell, view.current_color_bg, view.current_color_wls, solution_color)
                 running = False
+                
                 # Draw again the Start and End cells because the solutions we return may have to go through a final cell to reach the second
-                view.draw_cell(self.get_start_cell(),"green",view.current_color_wls)  
+                view.draw_cell(self.maze_controller.get_start_cell(),"green",view.current_color_wls)  
                 for cell in self.get_end_cells():
                     view.draw_cell(cell,"red",view.current_color_wls)
+                    
                 pygame.display.update()
             elif return_value is None:   # The returned value is one of the end cells, so the method returned None
                 continue
@@ -189,6 +183,7 @@ class ViewController:
     
     # Method that stops the visual part of the program before closing the program
     def stop_visual_part(self) -> None:
-        self.stop_handle_algorithms.set()
-        self.handle_algorithms_thread.join()
+        if self.handle_algorithms_thread and self.handle_algorithms_thread.is_alive():
+            self.stop_handle_algorithms.set()
+            self.handle_algorithms_thread.join()
     

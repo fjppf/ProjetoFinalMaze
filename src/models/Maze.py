@@ -11,7 +11,6 @@ class Maze:
         self.start_cell:'Cell' = None
         self.end_cells:list = []
         self.current_cell:'Cell' = None
-        self.next_cell:'Cell' = None
         self.stack:list = []
         self.queue:deque = deque()
         self.paths:list = []
@@ -55,12 +54,6 @@ class Maze:
         return self.current_cell
     def set_current_cell(self,cell:'Cell')->None:
         self.current_cell = cell
-    
-    # next_cell attribute getter and setter methods
-    def get_next_cell(self)-> 'Cell':
-        return self.next_cell
-    def set_next_cell(self,cell:'Cell')->None:
-        self.next_cell = cell
         
     # paths attribute getter, setter and other methods
     def get_paths(self)->list:
@@ -152,18 +145,17 @@ class Maze:
     def clear_breadth_variables(self) -> None:
         self.set_current_cell(None)
         self.set_queue(deque())
-        self.set_next_cell(None)
         self.set_paths([])
     
     # Method that resets all variables used in the depth search method
     def clear_depth_A_variables(self) -> None:
         self.set_current_cell(None)
         self.set_stack([])
-        self.set_next_cell(None)
+        # self.set_next_cell(None)
         self.set_paths([])
         
     # Method of the Breadth algorithm that aims to save the atual solution
-    def save_solution(self):
+    def save_solution(self) -> None:
         for path in self.get_paths():
             # If the path contains one of the final cells of the maze and that path has not already been saved in the list of solutions
             if path[-1] in self.get_end_cells() and path not in self.get_solutions(): 

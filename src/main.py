@@ -1,7 +1,6 @@
 # To run this code it is necessary to install some libraries before running so use the command 
 # "pip install -r requirements.txt"
 
-import threading
 import pygame
 import pygame_widgets
 import pygame_widgets.button
