@@ -300,9 +300,9 @@ class MazeController:
         # We start the distance variable as high as possible
         min_distance:float = float('inf')
         # Get the coordinates of the final cell
-        end_cell_coords = (self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
+        end_cell_coords:int = (self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
                         self.cell_controller.get_y(self.maze.get_end_cells()[index]) + 10)
-        
+            
         for cell in cells:
             # # Distance between the starting cell and the cell -> g(n)
             # distance_start:int = math.sqrt(((self.cell_controller.get_x(self.maze.get_start_cell())+10)-(self.cell_controller.get_x(cell)+10))**2 + ((self.cell_controller.get_y(self.maze.get_start_cell())+10)-(self.cell_controller.get_y(cell)+10))**2) 
