@@ -81,7 +81,7 @@ class View:
         
         # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
         # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
-        lsBtn:pygame.image = pygame.image.load("src/images/Lsearch.png").convert()  
+        lsBtn:pygame.image = pygame.image.load("src/images/floodfillsearch.png").convert()  
         self.lsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(lsBtn,(175,60)))
 
         brBtn:pygame.image = pygame.image.load("src/images/breadthSearch.png").convert()  
