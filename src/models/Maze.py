@@ -81,8 +81,8 @@ class Maze:
                 del temp_path
                 break
         
-    def remove_paths(self)->list:
-        return self.stack.pop()
+    def append_paths(self,index:int,value:Union[tuple,'Cell']) -> None:
+        self.paths[index].append(value)
         
     # stack attribute getter, setter and other methods
     def get_stack(self)->list:
@@ -151,7 +151,13 @@ class Maze:
     def clear_depth_A_variables(self) -> None:
         self.set_current_cell(None)
         self.set_stack([])
-        # self.set_next_cell(None)
+        self.set_paths([])
+        
+    # Method that resets all variables used in the depth search method
+    def clear_flood_variables(self) -> None:
+        self.set_current_cell(None)
+        self.set_stack([])
+        
         self.set_paths([])
         
     # Method of the Breadth algorithm that aims to save the atual solution

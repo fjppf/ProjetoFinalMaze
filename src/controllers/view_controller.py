@@ -181,6 +181,13 @@ class ViewController:
     def second_fase_A(self) -> Union['Cell',list,None]:
         return self.maze_controller.second_fase_A()
     
+    # Methods for the Flood Fill algorithm
+    def first_fase_flood(self) -> None:
+        self.maze_controller.first_fase_A()
+    
+    def second_fase_flood(self) -> Union['Cell',list,None]:
+        return self.maze_controller.second_fase_A()
+    
     # Method that stops the visual part of the program before closing the program
     def stop_visual_part(self) -> None:
         if self.handle_algorithms_thread and self.handle_algorithms_thread.is_alive():

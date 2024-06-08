@@ -1,10 +1,9 @@
 from models.Cell import Cell
-
 class CellController:
     # Constructor of the CellController class
     def __init__(self) -> None:
         pass
-        
+
     # Method that allows the creation of a new cell
     def create_cell(self,x:int,y:int) -> Cell:
         return Cell(x,y)
@@ -35,9 +34,55 @@ class CellController:
     def set_visited(self,cell:Cell,visited:bool) -> None:
         cell.set_visited(visited)
         
-    # Methods that make use of the get and set methods of the neighbors attribute of the passed cell
-    def get_neighbors(self,cell:Cell)->list:
-        return cell.get_neighbors()
-    def set_neighbors(self,cell:Cell,list:list)->None:
-        cell.set_neighbors(list)
+    # Methods that make use of the get and set methods of the cost attribute of the passed cell
+    def get_cost(self,cell:Cell) -> int:
+        return cell.get_cost()
+    def set_cost(self,cell:Cell,value:int) -> None:
+        cell.set_cost(value)
+        
+    # Method that find the neighbors if they exist around the cell
+    def find_neighbors(self,check_cell_method:callable,cell:'Cell') -> list['Cell']:
+        # Check the top neighbor
+        top:'Cell' = check_cell_method(cell.get_x(), cell.get_y()-1)
+        # Check the right neighbor
+        right:'Cell' = check_cell_method(cell.get_x() + 1, cell.get_y())
+        # Check the bottom neighbor
+        bottom:'Cell' = check_cell_method(cell.get_x(), cell.get_y() + 1)
+        # Check the left neighbor
+        left:'Cell' = check_cell_method(cell.get_x() - 1, cell.get_y())
+        return (top,right,bottom,left)
+        
+    # Method that sees which neighbors are available and chooses one to follow
+    def check_neighbors_generate_maze(self,check_cell_method:callable,cell:'Cell') -> list['Cell']:
+        neighbors:list['Cell'] = []
+        # Neighbors
+        top,right,bottom,left = self.find_neighbors(check_cell_method,cell)
+
+        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
+        # gets added to the list.
+        if top and not top.get_visited():
+            neighbors.append(top)
+        if right and not right.get_visited():
+            neighbors.append(right)
+        if bottom and not bottom.get_visited(): 
+            neighbors.append(bottom)
+        if left and not left.get_visited(): 
+            neighbors.append(left)
+        return neighbors
+    
+    # Method that sees which neighbors are available and chooses one to follow
+    def check_neighbors_algorithms(self,check_cell_method:callable,cell:'Cell') -> list['Cell']:
+        neighbors:list['Cell'] = []
+        top,right,bottom,left = self.find_neighbors(check_cell_method,cell) # Neighbors
+        # If there is a cell on top/right/bottom/left of the current cell, and that cell(top/right/bottom/left) it's not visited 
+        # gets added to the list.
+        if top and not top.get_visited() and not top.get_wall("bottom"):
+            neighbors.append(top)
+        if right and not right.get_visited() and not right.get_wall("left"):
+            neighbors.append(right)
+        if bottom and not bottom.get_visited() and not bottom.get_wall("top"): 
+            neighbors.append(bottom)
+        if left and not left.get_visited() and not left.get_wall("right"): 
+            neighbors.append(left)
+        return neighbors
     

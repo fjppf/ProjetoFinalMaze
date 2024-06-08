@@ -8,6 +8,7 @@ class Cell:
         self.size:int = 20 
         self.walls:dict = {"top": True, "right": True, "bottom": True, "left": True} 
         self.visited:bool = False 
+        self.cost:int = 0
 
     # x attribute getter and setter methods
     def get_x(self) -> int:
@@ -38,6 +39,12 @@ class Cell:
         return self.visited
     def set_visited(self,visited:bool) -> None:
         self.visited = visited
+        
+    # cost attribute getter and setter methods
+    def get_cost(self) -> int:
+        return self.cost
+    def set_cost(self,value:int) -> None:
+        self.cost = value
     
     # Method that remove the walls from the cells
     def remove_walls(self, next:'Cell') -> None:
