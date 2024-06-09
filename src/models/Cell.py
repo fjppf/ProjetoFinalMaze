@@ -1,4 +1,5 @@
 from typing import Union
+from utils.log_exception import log_exception
 class Cell:
     # Class constructor
     def __init__(self,x,y) -> None:
@@ -48,25 +49,28 @@ class Cell:
     
     # Method that remove the walls from the cells
     def remove_walls(self, next:'Cell') -> None:
-        # Calculate the difference in x coordinates between the current cell and the next cell
-        dx:int = self.x - next.x
-        # If the difference is 1 (indicating next cell is to the left of current cell)
-        if dx == 1:
-            self.set_wall('left',False) # In the current cell removes the left wall 
-            next.set_wall('right',False) # In the next cell removes the right wall 
-        # If the difference is -1 (indicating next cell is to the right of current cell)
-        elif dx == -1:
-            self.set_wall('right',False) # In the current cell removes the right wall 
-            next.set_wall('left',False) # In the next cell removes the left wall 
-        # Calculate the difference in y coordinates between the current cell and the next cell
-        dy:int = self.y - next.y
-        # If the difference is 1 (indicating next cell is above the current cell)
-        if dy == 1:
-            self.set_wall('top',False) # In the current cell removes the top wall 
-            next.set_wall('bottom',False) # In the next cell removes the bottom wall 
-        # If the difference is -1 (indicating next cell is below the current cell)
-        elif dy == -1:
-            self.set_wall('bottom',False) # In the current cell removes the bottom wall 
-            next.set_wall('top',False) # In the next cell removes the top wall 
+        try:
+            # Calculate the difference in x coordinates between the current cell and the next cell
+            dx:int = self.x - next.x
+            # If the difference is 1 (indicating next cell is to the left of current cell)
+            if dx == 1:
+                self.set_wall('left',False) # In the current cell removes the left wall 
+                next.set_wall('right',False) # In the next cell removes the right wall 
+            # If the difference is -1 (indicating next cell is to the right of current cell)
+            elif dx == -1:
+                self.set_wall('right',False) # In the current cell removes the right wall 
+                next.set_wall('left',False) # In the next cell removes the left wall 
+            # Calculate the difference in y coordinates between the current cell and the next cell
+            dy:int = self.y - next.y
+            # If the difference is 1 (indicating next cell is above the current cell)
+            if dy == 1:
+                self.set_wall('top',False) # In the current cell removes the top wall 
+                next.set_wall('bottom',False) # In the next cell removes the bottom wall 
+            # If the difference is -1 (indicating next cell is below the current cell)
+            elif dy == -1:
+                self.set_wall('bottom',False) # In the current cell removes the bottom wall 
+                next.set_wall('top',False) # In the next cell removes the top wall 
+        except Exception as e:
+            log_exception(e)
             
    

@@ -1,6 +1,7 @@
 import random
 from typing import Union
 from collections import deque
+from utils.log_exception import log_exception
 class Maze:
     # Class constructor
     def __init__(self) -> None:
@@ -64,22 +65,32 @@ class Maze:
     def add_paths(self,list:list)->None:
         self.paths.append(list)
     
+    # Method that will search on the paths list one path that is last element is the cell passed as parameter and then add to that path the element passed also on parameters
     def add_element_path(self,cell:'Cell',element:'Cell')->None:
-        if len(self.get_paths()) ==2:
-            pass
-        for path in self.get_paths():
-            if path[-1] == cell:
-                path.append(element)
+        try:
+            paths:list[list] = self.get_paths()
+            for path in paths:
+                if path[-1] == cell:
+                    path.append(element)
+        except TypeError as e: # self.get_paths() may return None which will raise a type exception
+            log_exception(e)
+        except Exception as e:
+            log_exception(e)
 
+    # Method that replicates a given path a certain number of times
     def add_copy_path(self,cell:'Cell',element:'Cell')->None:
-        paths = self.get_paths()
-        for path in paths:
-            if path[-2] == cell:
-                temp_path:list = path[0:-1]
-                temp_path.append(element)
-                self.add_paths(temp_path)
-                del temp_path
-                break
+        try:
+            paths = self.get_paths()
+            for path in paths:
+                if path[-2] == cell:
+                    temp_path:list = path[0:-1]
+                    temp_path.append(element)
+                    self.add_paths(temp_path)
+                    break
+        except TypeError as e:
+            log_exception(e)
+        except Exception as e:
+            log_exception(e)
         
     def append_paths(self,index:int,value:Union[tuple,'Cell']) -> None:
         self.paths[index].append(value)
@@ -123,51 +134,56 @@ class Maze:
     
     # Method that will define the last cells
     def set_final_cells(self) -> None:
-        # If the maze is greater than or equal to 15x15 then we can have zero, one or two final squares, if it is smaller we have zero or one final square
-        number: int = random.randint(0, 2) if self.get_cols() * self.get_rows() >= 225 else random.randint(0, 1)
-        # Assign a random final house in the 4th quadrant of the maze
-        if number == 1: 
-            self.add_end_cells(self.get_grid()[random.randint(self.get_rows()//2, self.get_rows()-1)][random.randint(self.get_cols()//2,self.get_cols()-1)])
-        # If the maze is going to have more than one final square then we have to ensure that it does not land on exactly the same square
-        # To do this, we define the first one and then check if the random numbers you gave us for the first one are not the same in the second one
-        elif number == 2:
-            start_end_1:int = random.randint(self.get_rows()//2, self.get_rows()-1)
-            final_end_1:int = random.randint(self.get_cols()//2,self.get_cols()-1)
-            self.add_end_cells(self.get_grid()[start_end_1][final_end_1]) # 1ª End_cell
-            start_end_2:int = random.randint(self.get_rows()//2, self.get_rows()-1)
-            final_end_2:int = random.randint(self.get_cols()//2,self.get_cols()-1)
-            while start_end_1 == start_end_2 and final_end_1 == final_end_2: # Only enter if the cell is the same
-                start_end_2 = random.randint(self.get_rows()//2, self.get_rows()-1)
-                final_end_2 = random.randint(self.get_cols()//2,self.get_cols()-1)
-            self.add_end_cells(self.get_grid()[start_end_2][final_end_2]) # 2ª end_cell
+        try:
+            # If the maze is greater than or equal to 15x15 then we can have zero, one or two final squares, if it is smaller we have zero or one final square
+            number: int = random.randint(0, 2) if self.get_cols() * self.get_rows() >= 225 else random.randint(0, 1)
+            # Assign a random final house in the 4th quadrant of the maze
+            if number == 1: 
+                self.add_end_cells(self.get_grid()[random.randint(self.get_rows()//2, self.get_rows()-1)][random.randint(self.get_cols()//2,self.get_cols()-1)])
+            # If the maze is going to have more than one final square then we have to ensure that it does not land on exactly the same square
+            # To do this, we define the first one and then check if the random numbers you gave us for the first one are not the same in the second one
+            elif number == 2:
+                start_end_1:int = random.randint(self.get_rows()//2, self.get_rows()-1)
+                final_end_1:int = random.randint(self.get_cols()//2,self.get_cols()-1)
+                self.add_end_cells(self.get_grid()[start_end_1][final_end_1]) # 1ª End_cell
+                start_end_2:int = random.randint(self.get_rows()//2, self.get_rows()-1)
+                final_end_2:int = random.randint(self.get_cols()//2,self.get_cols()-1)
+                while start_end_1 == start_end_2 and final_end_1 == final_end_2: # Only enter if the cell is the same
+                    start_end_2 = random.randint(self.get_rows()//2, self.get_rows()-1)
+                    final_end_2 = random.randint(self.get_cols()//2,self.get_cols()-1)
+                self.add_end_cells(self.get_grid()[start_end_2][final_end_2]) # 2ª end_cell
+        except Exception as e: # We may have maze boundary exceptions
+            log_exception(e)
     
     # Method that resets all variables used in the breadth search method
     def clear_breadth_variables(self) -> None:
-        self.set_current_cell(None)
-        self.set_queue(deque())
-        self.set_paths([])
+        try:
+            self.set_current_cell(None)
+            self.set_queue(deque())
+            self.set_paths([])
+        except Exception as e:
+            log_exception(e)
     
-    # Method that resets all variables used in the depth search method
-    def clear_depth_A_variables(self) -> None:
-        self.set_current_cell(None)
-        self.set_stack([])
-        self.set_paths([])
-        
-    # Method that resets all variables used in the depth search method
-    def clear_flood_variables(self) -> None:
-        self.set_current_cell(None)
-        self.set_stack([])
-        
-        self.set_paths([])
+    # Method that resets all variables used in the depth and A* search method
+    def clear_depth_A_Flood_variables(self) -> None:
+        try:
+            self.set_current_cell(None)
+            self.set_stack([])
+            self.set_paths([])
+        except Exception as e:
+            log_exception(e)
         
     # Method of the Breadth algorithm that aims to save the atual solution
     def save_solution(self) -> None:
-        for path in self.get_paths():
-            # If the path contains one of the final cells of the maze and that path has not already been saved in the list of solutions
-            if path[-1] in self.get_end_cells() and path not in self.get_solutions(): 
-                # We save a copy of that path using the slicing technique
-                self.add_solutions(path[:])              
-                break       
+        try:
+            for path in self.get_paths():
+                # If the path contains one of the final cells of the maze and that path has not already been saved in the list of solutions
+                if path[-1] in self.get_end_cells() and path not in self.get_solutions(): 
+                    # We save a copy of that path using the slicing technique
+                    self.add_solutions(path[:])              
+                    break    
+        except Exception as e:
+            log_exception(e)   
 
             
         

@@ -177,7 +177,7 @@ class MazeController:
             return None
         else:
             self.clear_visited_attribute() # Clear all visited attributes
-            self.maze.clear_depth_A_variables()
+            self.maze.clear_depth_A_Flood_variables()
             return self.maze.get_solutions()
         
         current_cell = self.maze.get_current_cell()
@@ -187,7 +187,7 @@ class MazeController:
             # If all the necessary solutions have already been found, then we return these
             if len(self.maze.get_solutions()) == len(end_cells):
                 self.clear_visited_attribute() # Clear all visited attributes
-                self.maze.clear_depth_A_variables()
+                self.maze.clear_depth_A_Flood_variables()
                 return self.maze.get_solutions()
             return None
         else:
@@ -196,7 +196,7 @@ class MazeController:
     # Method that clean the variables used in the Depth and A* algorithms  
     def delete_depth_A(self) -> None:
         self.clear_visited_attribute()
-        self.maze.clear_depth_A_variables()
+        self.maze.clear_depth_A_Flood_variables()
     
     # Method that starts the A* Search algorithm
     def first_fase_A(self) -> None:
@@ -233,7 +233,7 @@ class MazeController:
             self.maze.set_current_cell(next_cell)  
         else: # Ends the algorithm
             self.clear_visited_attribute() 
-            self.maze.clear_depth_A_variables() 
+            self.maze.clear_depth_A_Flood_variables() 
             return self.maze.get_solutions()
         
         # Final verification to save the solution if necessary
@@ -243,7 +243,7 @@ class MazeController:
             # If all the necessary solutions have already been found, then we return these
             if len(self.maze.get_solutions()) == len(end_cells):
                 self.clear_visited_attribute() 
-                self.maze.clear_depth_A_variables()
+                self.maze.clear_depth_A_Flood_variables()
                 return self.maze.get_solutions()
             return None
         else:
@@ -273,12 +273,11 @@ class MazeController:
         return optimal_cell
     
     # Method that clear the cost attribute of each cell
-    def clear_cost_attribute(self) -> None:
-        # Clear all visited attributes of each maze cell for future use in the search for resolution
-        grid:list[list] = self.maze.get_grid() # Current grid
-        for row in range(0,self.maze.get_rows()):            
-            for col in range(0,self.maze.get_cols()):
-                self.cell_controller.set_cost(grid[row][col],0)
+    def clear_cost_cell_attribute(self):
+        grid:list[list['Cell']] = self.maze.get_grid()
+        for row in grid:
+            for cell in row:
+                self.cell_controller.set_cost(cell,0)
                 
     # Method that starts the Flood Fill Search algorithm
     def first_fase_flood(self) -> None:
@@ -289,42 +288,35 @@ class MazeController:
     
     def second_fase_flood(self) -> Union['Cell',None,list]:
         current_cell:'Cell' = self.maze.get_current_cell()
-        self.cell_controller.set_visited(current_cell,True) # Mark the current cell as visited
+        self.cell_controller.set_visited(current_cell,True) 
         neighbors:list['Cell'] = self.cell_controller.check_neighbors_algorithms(self.check_cell,current_cell)
-        
-        # Get the next unvisited neighbor. If there is more than one we choose randomly
         next_cell:'Cell' = choice(neighbors) if neighbors else None
-        if next_cell: # If there is an unvisited neighbor
-            self.maze.add_stack(current_cell) # Add the current cell to the stack
+        if next_cell: 
+            self.cell_controller.set_cost(next_cell,self.cell_controller.get_cost(current_cell)+1)
+            self.maze.add_stack(current_cell) 
             if next_cell in self.maze.get_end_cells():
                 self.maze.add_paths(0,(next_cell,))
             self.maze.add_paths(current_cell, next_cell)
-            self.maze.set_current_cell(next_cell)  # Move to the next cell
-        elif self.maze.get_stack(): # If the stack is not empty
-            self.maze.set_current_cell(self.maze.pop_stack()) # Move back to the previous cell
+            self.maze.set_current_cell(next_cell)  
+        elif self.maze.get_stack(): 
+            next_cell = self.maze.pop_stack()
+            self.cell_controller.set_cost(next_cell,self.cell_controller.get_cost(current_cell)+1)
+            self.maze.set_current_cell(next_cell) 
             return None
         else:
+            # Get the better paths
+            
+            # Reset all used variables
+            self.clear_cost_cell_attribute()
             self.clear_visited_attribute() # Clear all visited attributes
-            self.maze.clear_depth_A_variables()
+            self.maze.clear_depth_A_Flood_variables()
             return self.maze.get_solutions()
-        
-        current_cell = self.maze.get_current_cell()
-        end_cells:list['Cell'] = self.maze.get_end_cells()
-        if current_cell in end_cells:
-            self.maze.save_solution()
-            # If all the necessary solutions have already been found, then we return these
-            if len(self.maze.get_solutions()) == len(end_cells):
-                self.clear_visited_attribute() # Clear all visited attributes
-                self.maze.clear_depth_A_variables()
-                return self.maze.get_solutions()
-            return None
-        else:
-            return current_cell
     
     # Method that clean the variables used in the Depth and A* algorithms  
     def delete_depth_A(self) -> None:
+        self.clear_cost_cell_attribute()
         self.clear_visited_attribute()
-        self.maze.clear_depth_A_variables()
+        self.maze.clear_depth_A_Flood_variables()
     
 
 
