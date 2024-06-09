@@ -194,7 +194,6 @@ class View:
         except Exception as e:
             log_exception(e)
         
-
     # metodo que limpa o ecra
     def clear_screen(self) -> None:
         try:
@@ -261,6 +260,7 @@ class View:
             self.pick_color_btn_wls.enable()
             self.pick_color_btn_bg.enable()
             self.clear_screen()
+            self.stop_visual_part()
         except Exception as e:
             log_exception(e)
     
