@@ -83,7 +83,7 @@ class View:
             # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
             # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
             fsBtn:pygame.image = pygame.image.load("src/images/floodfillsearch.png").convert()  
-            self.fsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.clear_screen, image=pygame.transform.scale(fsBtn,(175,60)))
+            self.fsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.fsearchBtn_click, image=pygame.transform.scale(fsBtn,(175,60)))
 
             brBtn:pygame.image = pygame.image.load("src/images/breadthSearch.png").convert()  
             self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.breadthBtn_click, image=pygame.transform.scale(brBtn,(175,60)))
@@ -313,7 +313,7 @@ class View:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
             
-            pass
+            self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_flood,self.view_controller.second_fase_flood,self.view_controller.delete_flood,"Flood Fill Algorithm")
         except Exception as e:
             log_exception(e)
 

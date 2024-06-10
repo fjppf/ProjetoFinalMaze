@@ -92,8 +92,8 @@ class Maze:
         except Exception as e:
             log_exception(e)
         
-    def append_paths(self,index:int,value:Union[tuple,'Cell']) -> None:
-        self.paths[index].append(value)
+    def append_paths(self,index:int,cell:'Cell') -> None:
+        self.paths[index].append(cell)
         
     # stack attribute getter, setter and other methods
     def get_stack(self)->list:

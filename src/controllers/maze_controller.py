@@ -363,49 +363,75 @@ class MazeController:
         for row in grid:
             for cell in row:
                 self.cell_controller.set_cost(cell,0)
-    
-    
-    
-    
+      
       
     # Method that starts the Flood Fill Search algorithm
     def first_fase_flood(self) -> None:
-        self.maze.set_solutions([]) # Clear the solutions variable
-        start_cell:'Cell' = self.get_start_cell()
-        self.maze.set_current_cell(start_cell)
-        self.maze.add_paths([(start_cell,0)]) # add to path list
+        try:
+            self.maze.set_solutions([]) # Clear the solutions variable
+            start_cell:'Cell' = self.get_start_cell()
+            self.maze.set_current_cell(start_cell)
+            self.cell_controller.set_cost(start_cell,0) # Set the cost of this cell
+            self.maze.add_paths([start_cell]) # Add to path list
+        except Exception as e:
+            log_exception(e)
     
     def second_fase_flood(self) -> Union['Cell',None,list]:
-        current_cell:'Cell' = self.maze.get_current_cell()
-        self.cell_controller.set_visited(current_cell,True) 
-        neighbors:list['Cell'] = self.cell_controller.check_neighbors_algorithms(self.check_cell,current_cell)
-        next_cell:'Cell' = choice(neighbors) if neighbors else None
-        if next_cell: 
-            self.cell_controller.set_cost(next_cell,self.cell_controller.get_cost(current_cell)+1)
-            self.maze.add_stack(current_cell) 
-            if next_cell in self.maze.get_end_cells():
-                self.maze.add_paths(0,(next_cell,))
-            self.maze.add_paths(current_cell, next_cell)
-            self.maze.set_current_cell(next_cell)  
-        elif self.maze.get_stack(): 
-            next_cell = self.maze.pop_stack()
-            self.cell_controller.set_cost(next_cell,self.cell_controller.get_cost(current_cell)+1)
-            self.maze.set_current_cell(next_cell) 
-            return None
-        else:
-            # Get the better paths
+        try:
+            # Get current cell, mark it as visited and add it to the list that will save all visited cells
+            current_cell:'Cell' = self.maze.get_current_cell()
+            self.maze.append_paths(0,current_cell) 
+            self.cell_controller.set_visited(current_cell,True) 
             
-            # Reset all used variables
-            self.clear_cost_cell_attribute()
-            self.clear_visited_attribute() # Clear all visited attributes
-            self.maze.clear_depth_A_Flood_variables()
-            return self.maze.get_solutions()
+            # Get neighbors of the current cell and check if it has neighbors, if so, assign one of them randomly to the next_cell variable
+            neighbors:list['Cell'] = self.cell_controller.check_neighbors_algorithms(self.check_cell,current_cell)
+            next_cell:'Cell' = choice(neighbors) if neighbors else None
+            
+            # If there is a next cell, we add it to the stack, assign its cost to it and make it the current cell
+            if next_cell: 
+                self.maze.add_stack(current_cell) # Add the current cell to the stack
+                self.cell_controller.set_cost(next_cell,self.cell_controller.get_cost(current_cell)+1)
+                self.maze.set_current_cell(next_cell)  
+                return None if self.maze.get_current_cell() in self.maze.get_end_cells() else self.maze.get_current_cell()
+            # If there is no next cell, we return to the previous cell, popping the stack
+            elif self.maze.get_stack(): 
+                next_cell = self.maze.pop_stack()
+                self.maze.set_current_cell(next_cell) 
+                return None
+            # If all cells have already been visited
+            else:
+                # Get the solutions for each end cells 
+                end_cells:list['Cell'] = self.maze.get_end_cells()
+                start_cell:'Cell' = self.maze.get_start_cell()
+                path:list = self.maze.get_paths()[0]
+                
+                # For each end cell we will get the solution for that cell
+                for end_cell in end_cells:
+                    solution:list = [end_cell]
+                    index_end_cell:int = path.index(end_cell)
+                    # Go through the list from the index where the final cell is located to index 0 
+                    # and save the necessary cells along the way, checking the cost
+                    for t in range(index_end_cell-1,0,-1):
+                        if path[t] is start_cell:
+                            solution.append(path[t])
+                        elif self.cell_controller.get_cost(path[t]) == self.cell_controller.get_cost(solution[-1])-1:
+                            solution.append(path[t])
+                    self.maze.add_solutions(solution)
+                    
+                # Reset all used variables
+                self.clear_cost_cell_attribute()
+                self.clear_visited_attribute() 
+                self.maze.clear_depth_A_Flood_variables()
+                return self.maze.get_solutions()
+        except Exception as e:
+            log_exception(e)
     
-    # Method that clean the variables used in the Depth and A* algorithms  
+    # Method that clean the variables used in the Flood Fill algorithm  
     def delete_flood(self) -> None:
         self.clear_cost_cell_attribute()
         self.clear_visited_attribute()
         self.maze.clear_depth_A_Flood_variables()
+        
     
 
 
