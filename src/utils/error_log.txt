@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "c:\Users\diogo\Desktop\ProjetoFinalMaze\src\models\Maze.py", line 85, in add_copy_path
+    if path[-2] == cell:
+       ~~~~^^^^
+IndexError: list index out of range
+Traceback (most recent call last):
+  File "c:\Users\diogo\Desktop\ProjetoFinalMaze\src\models\Maze.py", line 85, in add_copy_path
+    if path[-2] == cell:
+       ~~~~^^^^
+IndexError: list index out of range
+Traceback (most recent call last):
+  File "c:\Users\diogo\Desktop\ProjetoFinalMaze\src\models\Maze.py", line 85, in add_copy_path
+    if path[-2] == cell:
+       ~~~~^^^^
+IndexError: list index out of range

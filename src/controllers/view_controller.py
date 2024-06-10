@@ -102,6 +102,27 @@ class ViewController:
         except Exception as e:
             log_exception(e)
     
+    # Method whose objective is to use a specific algorithm to solve the maze
+    def solve_maze(self,view:'view') -> None:
+        try:
+            cols:int = self.maze_controller.get_cols()
+            rows:int = self.maze_controller.get_rows()
+            
+            # Choose which algorithm use depending the size of the maze created
+            if cols <=10 and rows <= 10:
+                self.start_handle_algorithms(view,self.first_fase_breadth,self.second_fase_breadth,self.delete_breadth,"Breadth Algorithm")
+            elif cols <= 15 and rows <= 15:
+                self.start_handle_algorithms(view,self.first_fase_depth,self.second_fase_depth,self.delete_depth_A,"Depth Algorithm")
+            else:
+                self.start_handle_algorithms(view,self.first_fase_A,self.second_fase_A,self.delete_depth_A,"A* Algorithm")
+                
+        except AttributeError as e:
+            log_exception(e)
+            return
+        except Exception as e:
+            log_exception(e)
+            return    
+    
     # Method that initializes or resets the thread responsible for running the algorithms
     def start_handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable,delete_method:callable, algorithm_name:str) -> None:
         try:

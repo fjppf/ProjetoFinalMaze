@@ -31,6 +31,14 @@ class MazeController:
     def get_end_cells(self) -> list['Cell']:
         return self.maze.get_end_cells()
     
+    # Method that returns the number of rows of the maze
+    def get_rows(self) -> int:
+        return self.maze.get_rows()
+    
+    # Method that returns the number of columns of the maze
+    def get_cols(self) -> int:
+        return self.maze.get_cols()
+        
     # Method that establishes the connections between the cell controller and maze controller in order to invoke the method in the cell controller to create a new cell.
     def create_cell(self,x:int,y:int) -> 'Cell':
         return self.cell_controller.create_cell(x,y)

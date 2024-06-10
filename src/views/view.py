@@ -70,7 +70,7 @@ class View:
             self.createBtn = Button(self.screen, self.screen_width-370, 285, 175, 60, radius=0, onClick=self.create_btn_click, image=pygame.transform.scale(create_Btn_img,(175,60)))
             
             solve_Btn_img:pygame.image = pygame.image.load("src/images/botaosolve.png").convert()   
-            self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.clear_screen, image=pygame.transform.scale(solve_Btn_img,(175,60)))
+            self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.solve_btn_click, image=pygame.transform.scale(solve_Btn_img,(175,60)))
             
             clear_Btn_img:pygame.image = pygame.image.load("src/images/botaoclear.png").convert()   
             self.clearBtn = Button(self.screen, self.screen_width-370, 365, 175, 60, radius=0, onClick=self.clear_btn_click, image=pygame.transform.scale(clear_Btn_img,(175,60)))
@@ -272,7 +272,7 @@ class View:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
             
-            pass
+            self.view_controller.solve_maze(self)
         except Exception as e:
             log_exception(e)
     
