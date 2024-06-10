@@ -1,3 +1,0 @@
-ficheiro "__init__.py"
-
--> Certifique-se de incluir um arquivo __init__.py vazio em cada subpasta para garantir que o Python reconheça essas pastas como pacotes.

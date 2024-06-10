@@ -12,8 +12,6 @@ class View:
     # Class constructor
     def __init__(self) -> None:
         try:
-            # Define the icon for the window
-            pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
             
             self.view_controller:ViewController = ViewController()
             
@@ -31,6 +29,8 @@ class View:
             self.ui_manager:pygame_gui.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
             self.screen.fill((255, 255, 255))
             pygame.display.set_caption("Maze Simulator")
+            # Define the icon for the window
+            pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
 
             # Desenhar os elementos na view
             self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
@@ -45,7 +45,7 @@ class View:
             self.txtNumbCols:TextBox = TextBox(self.screen, self.screen_width-212, 70, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
             # Draw text in view
             self.draw_labels("Number of rows :", self.text_font,self.color_black,self.screen_width-343,120)
-            # Draw textbox to insert the desired number of columns
+            # Draw textbox to insert the desired number of lines
             self.txtNumbRowss:TextBox = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
             # Draw text in view
             self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
@@ -94,6 +94,18 @@ class View:
             asBtn:pygame.image = pygame.image.load("src/images/ASearch.png").convert()  
             self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.asearchBtn_click, image=pygame.transform.scale(asBtn,(175,60)))
             
+            # Enable and Disable certain buttons
+            self.pick_color_btn_wls.enable()
+            self.pick_color_btn_bg.enable()
+            self.createBtn.enable()
+            self.solveBtn.disable()
+            self.clearBtn.disable()
+            self.saveBtn.disable()
+            self.fsearchBtn.disable()
+            self.breadthBtn.disable()
+            self.depthBtn.disable()
+            self.asearchBtn.disable()
+            
             pygame.display.update()#updates the display
         except pygame.error as e: # can occur, for example, if the drawing coordinates are wrong 
             log_exception(e)
@@ -121,7 +133,7 @@ class View:
                 pygame.draw.line(self.screen, pygame.Color(wl_color), (x, y + self.view_controller.get_size_cell(cell)), (x, y))
         except pygame.error as e: # can occur, for example, if the drawing coordinates are wrong 
             log_exception(e)
-        except TypeError as e: # may occur if the types of parameters passed are of the wrong type
+        except TypeError as e: # May occur if the types of parameters passed are of the wrong type
             log_exception(e)
         except Exception as e:
             log_exception(e)
@@ -234,9 +246,17 @@ class View:
             check:tuple = self.view_controller.check_inputs(self.txtNumbRowss.getText(),self.txtNumbCols.getText(),self.screen_width,self.screen_height)
             if len(check)==0:
                 # Disable certain buttons and call the method that draws the maze
-                self.createBtn.disable()
                 self.pick_color_btn_wls.disable()
                 self.pick_color_btn_bg.disable()
+                self.createBtn.disable()
+                self.solveBtn.enable()
+                self.clearBtn.enable()
+                self.saveBtn.disable()
+                self.fsearchBtn.enable()
+                self.breadthBtn.enable()
+                self.depthBtn.enable()
+                self.asearchBtn.enable()
+                
                 self.generate_maze()
             else:
                 self.txtNumbCols.setText(check[0])
@@ -249,6 +269,9 @@ class View:
     # Method called when clicking on the main solve button
     def solve_btn_click(self) -> None:
         try:
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             pass
         except Exception as e:
             log_exception(e)
@@ -256,9 +279,19 @@ class View:
     # Method called when the main clear button is clicked
     def clear_btn_click(self) -> None:
         try:
-            self.createBtn.enable()
+            # Disable certain buttons and call the method that clears the maze
             self.pick_color_btn_wls.enable()
             self.pick_color_btn_bg.enable()
+            self.createBtn.enable()
+            self.solveBtn.disable()
+            self.clearBtn.disable()
+            self.saveBtn.disable()
+            self.fsearchBtn.disable()
+            self.breadthBtn.disable()
+            self.depthBtn.disable()
+            self.asearchBtn.disable()
+            
+            # Clear the screen
             self.clear_screen()
             self.stop_visual_part()
         except Exception as e:
@@ -267,6 +300,9 @@ class View:
     # Call method when clicking on the main Save button
     def save_btn_click(self) -> None:
         try:
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             self.view_controller.save_maze(self.screen)
         except Exception as e:
             log_exception(e)
@@ -274,6 +310,9 @@ class View:
     # Method called when clicking on the secondary button for the L* Search algorithm
     def fsearchBtn_click(self) -> None:
         try:
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             pass
         except Exception as e:
             log_exception(e)
@@ -281,11 +320,9 @@ class View:
     # Method called when clicking on the secondary button for the Breadth Search algorithm
     def breadthBtn_click(self) -> None:
         try:
-            # Disable all other buttons except the secondary buttons and clear or save button.
-            self.pick_color_btn_wls.disable()
-            self.pick_color_btn_bg.disable()
-            self.createBtn.disable()
-            self.solveBtn.disable()
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,self.view_controller.delete_breadth,"Breadth Algorithm")
         except Exception as e:
             log_exception(e)
@@ -293,11 +330,9 @@ class View:
     # Method called when clicking on the secondary button for the Depth First Search algorithm
     def depthBtn_click(self) -> None:
         try:
-            # Disable all other buttons except the secondary buttons and clear or save button. ##########################
-            self.pick_color_btn_wls.disable()
-            self.pick_color_btn_bg.disable()
-            self.createBtn.disable()
-            self.solveBtn.disable()
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,self.view_controller.delete_depth_A,"Depth Algorithm")
         except Exception as e:
             log_exception(e)  
@@ -305,11 +340,29 @@ class View:
     # Method called when clicking on the secondary button for the A* Search algorithm
     def asearchBtn_click(self) -> None:
         try:
+            # Disable and enable certain buttons
+            self.ena_dis_buttons()
+            
             # Disable all other buttons except the secondary buttons and clear or save button. ########################
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_A,self.view_controller.second_fase_A,self.view_controller.delete_depth_A,"A* Algorithm")
         except Exception as e:
             log_exception(e)
-        
+    
+    
+    # Method that enables or disables buttons when the user chooses the solve button,Save button or any of the algorithm buttons
+    def ena_dis_buttons(self):
+        # Disable certain buttons
+            self.pick_color_btn_wls.disable()
+            self.pick_color_btn_bg.disable()
+            self.createBtn.disable()
+            self.solveBtn.enable()
+            self.clearBtn.enable()
+            self.saveBtn.enable()
+            self.fsearchBtn.enable()
+            self.breadthBtn.enable()
+            self.depthBtn.enable()
+            self.asearchBtn.enable()
+            
     # Method that calls the method in view_controller file that will stops the visual part of the program
     def stop_visual_part(self) -> None:
         try:
