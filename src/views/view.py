@@ -81,7 +81,7 @@ class View:
             # Draw text in view
             self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
             # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
-            # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
+            # Each button is named after the function that can be used for resolution (Flood Fill, Breadth, Depth, A*)
             fsBtn:pygame.image = pygame.image.load("src/images/floodfillsearch.png").convert()  
             self.fsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.fsearchBtn_click, image=pygame.transform.scale(fsBtn,(175,60)))
 
