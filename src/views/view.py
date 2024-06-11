@@ -48,8 +48,8 @@ class View:
             # Draw textbox to insert the desired number of lines
             self.txtNumbRowss:TextBox = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
             # Draw text in view
-            self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
             
+            self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
             # Below we have initialized the initial colors of both the background and the walls of the maze, and we also have an explanation of the button parameters
             # The rectangles serve to show the user which color is chosen in the picker and which will be used to create the maze
             self.current_color_wls:pygame.color = pygame.Color(255,140,0)
@@ -77,9 +77,9 @@ class View:
             
             save_Btn_img:pygame.image = pygame.image.load("src/images/botaosave.png").convert()   
             self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.save_btn_click, image=pygame.transform.scale(save_Btn_img,(175,60)))
+            
             # Draw text in view
             self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
-            
             # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
             # Each button is named after the function that can be used for resolution (L*, Breadth, Depth, A*)
             fsBtn:pygame.image = pygame.image.load("src/images/floodfillsearch.png").convert()  
