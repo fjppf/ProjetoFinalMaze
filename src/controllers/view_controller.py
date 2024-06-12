@@ -183,7 +183,6 @@ class ViewController:
                     view.draw_cell(self.maze_controller.get_start_cell(),"green",view.current_color_wls)  
                     for cell in self.get_end_cells():
                         view.draw_cell(cell,"red",view.current_color_wls)
-                    print(counter)   
                     pygame.display.update()
                 elif return_value is None:   # The returned value is one of the end cells, so the method returned None
                     continue
