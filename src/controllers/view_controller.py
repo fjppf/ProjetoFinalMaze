@@ -171,7 +171,8 @@ class ViewController:
                     generate_algorithm_time:int = abs(round(time.time() - start - (counter*0.100), 4)) # end - start - times that we use the delay time
                     view.clear_screen()
                     view.draw_maze()
-                    view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20) # Draw timer
+                    view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-40) # Draw timer
+                    view.draw_labels(f"Number of iterations: {counter}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20)
                     # Draw the returned solutions
                     for solution in return_value: 
                         for cell in solution[1:-1]:
@@ -182,7 +183,7 @@ class ViewController:
                     view.draw_cell(self.maze_controller.get_start_cell(),"green",view.current_color_wls)  
                     for cell in self.get_end_cells():
                         view.draw_cell(cell,"red",view.current_color_wls)
-                        
+                    print(counter)   
                     pygame.display.update()
                 elif return_value is None:   # The returned value is one of the end cells, so the method returned None
                     continue

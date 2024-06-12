@@ -45,7 +45,7 @@ class MazeController:
     
     # Returns the size (width, height) of the maze in pixels with a 20 pixel margin all around
     def get_px_size_maze(self) -> tuple:
-        return (self.maze.get_cols() * 20 + 40,self.maze.get_rows() * 20 + 40)
+        return (self.maze.get_cols() * 20 + 60,self.maze.get_rows() * 20 + 60)
     
     # Get a valid name to save the maze
     def get_save_name_maze(self) -> str:
