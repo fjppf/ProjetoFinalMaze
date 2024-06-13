@@ -329,28 +329,79 @@ class MazeController:
         except Exception as e:
             log_exception(e)
     
-    # Method that will determine which previously visited cell has the lowest cost among the initial cell, the currently evaluated cell, and the final cell in order to obtain the best cell
-    def choose_best_cell(self,cells:list['Cell'],index:int)->'Cell':
+    # # Method that will determine which previously visited cell has the lowest cost among the initial cell, the currently evaluated cell, and the final cell in order to obtain the best cell
+    # def choose_best_cell(self,cells:list['Cell'],index:int)->'Cell':
+    #     try:
+    #         optimal_cell:'Cell' = None
+    #         # We start the distance variable as high as possible
+    #         min_distance:float = float('inf')
+    #         # Get the coordinates of the final cell
+    #         end_cell_coords:int = (self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
+    #                         self.cell_controller.get_y(self.maze.get_end_cells()[index]) + 10)
+                
+    #         for cell in cells:           
+    #             # Get current cell coordinates
+    #             current_cell_coords = (self.cell_controller.get_x(cell) + 10,
+    #                                 self.cell_controller.get_y(cell) + 10)
+    #             # distance = distance between the final_cell and the checked cell
+    #             distance = math.sqrt((current_cell_coords[0] - end_cell_coords[0]) ** 2 +
+    #                                 (current_cell_coords[1] - end_cell_coords[1]) ** 2)
+                
+    #             # Check what is the minor total cost and save that value for future check, and save that cell
+    #             if distance < min_distance:
+    #                 min_distance = distance
+    #                 optimal_cell = cell    
+    #         return optimal_cell
+    #     except IndexError as e:
+    #         log_exception(e)
+    #     except Exception as e:
+    #         log_exception(e)
+            
+    # Method that will determine which previously visited cell has the lowest cost
+    def choose_best_cell(self, cells: list['Cell'], index: int) -> 'Cell':
         try:
-            optimal_cell:'Cell' = None
-            # We start the distance variable as high as possible
-            min_distance:float = float('inf')
+            optimal_cell: 'Cell' = None
+            # We start the f_cost variable as high as possible
+            min_f_cost: float = float('inf')
             # Get the coordinates of the final cell
-            end_cell_coords:int = (self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
-                            self.cell_controller.get_y(self.maze.get_end_cells()[index]) + 10)
-                
-            for cell in cells:           
+            end_cell_coords = (
+                self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
+                self.cell_controller.get_y(self.maze.get_end_cells()[index]) + 10
+            )
+            
+            for cell in cells:
                 # Get current cell coordinates
-                current_cell_coords = (self.cell_controller.get_x(cell) + 10,
-                                    self.cell_controller.get_y(cell) + 10)
-                # distance = distance between the final_cell and the checked cell
-                distance = math.sqrt((current_cell_coords[0] - end_cell_coords[0]) ** 2 +
-                                    (current_cell_coords[1] - end_cell_coords[1]) ** 2)
+                current_cell_coords = (
+                    self.cell_controller.get_x(cell) + 10,
+                    self.cell_controller.get_y(cell) + 10
+                )
                 
-                # Check what is the minor total cost and save that value for future check, and save that cell
-                if distance < min_distance:
-                    min_distance = distance
-                    optimal_cell = cell    
+                # Get start cell coordinates
+                start_cell_coords = (
+                    self.cell_controller.get_x(self.maze.get_start_cell()) + 10,
+                    self.cell_controller.get_y(self.maze.get_start_cell()) + 10
+                )
+
+                # Heuristic cost: distance between the current cell and the final cell
+                h_cost = math.sqrt(
+                    (current_cell_coords[0] - end_cell_coords[0]) ** 2 +
+                    (current_cell_coords[1] - end_cell_coords[1]) ** 2
+                )
+                
+                # Distance between the start_cell and the current cell
+                g_cost:float = math.sqrt(
+                    (current_cell_coords[0] - start_cell_coords[0]) ** 2 +
+                    (current_cell_coords[1] - start_cell_coords[1]) ** 2
+                )
+                
+                # Total cost: f_cost = g_cost + h_cost
+                f_cost = g_cost + h_cost
+                
+                # Check what is the lowest total cost and save that value for future checks, and save that cell
+                if f_cost < min_f_cost:
+                    min_f_cost = f_cost
+                    optimal_cell = cell
+            
             return optimal_cell
         except IndexError as e:
             log_exception(e)

@@ -172,7 +172,7 @@ class ViewController:
                     view.clear_screen()
                     view.draw_maze()
                     view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-40) # Draw timer
-                    view.draw_labels(f"Number of iterations: {counter}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20)
+                    view.draw_labels(f"Number of iterations: {counter + len(return_value)}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20)
                     # Draw the returned solutions
                     for solution in return_value: 
                         for cell in solution[1:-1]:
@@ -184,8 +184,8 @@ class ViewController:
                     for cell in self.get_end_cells():
                         view.draw_cell(cell,"red",view.current_color_wls)
                     pygame.display.update()
-                elif return_value is None:   # The returned value is one of the end cells, so the method returned None
-                    continue
+                elif return_value is None:   # The returned value is one of the end cells or a death end, so the method returned None
+                    continue       
                 else:   # The returned value is a cell
                     # Draw the returned cell, which is the cell that was explored, and give the program a delay of 100 milliseconds so that it is clear to the user how the algorithm is exploring
                     view.draw_solution(return_value, view.current_color_bg, view.current_color_wls, solution_color)
