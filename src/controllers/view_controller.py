@@ -45,8 +45,8 @@ class ViewController:
     # Check input rows and columns
     def check_inputs(self,rows:str,columns:str,width:int,height:int):
         try:
-            #valid min columns = left margin + 5 * cell_size  || valid min height = top margin + 5 * cell_size
-            if int(columns) < 7 and int(rows) < 7:
+            # Min columns and min rows = 7
+            if int(columns) < 7 or int(rows) < 7:
                 return ("Min columns:7","Min rows:7")
             else:
                 #valid max columns = width - right elements - left and right margins  || valid max height = height - top margin - bottom margin

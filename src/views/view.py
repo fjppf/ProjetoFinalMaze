@@ -185,7 +185,7 @@ class View:
     # The method that generate the maze
     def generate_maze(self)->None:
         try:
-            start = time.time()
+            start:float = time.time()
             self.grid_maze = self.view_controller.generate_maze(int(self.txtNumbRowss.getText()),int(self.txtNumbCols.getText()))
             self.generate_maze_time = abs(round(time.time() - start, 4))
             self.draw_maze()
