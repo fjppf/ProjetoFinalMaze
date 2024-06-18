@@ -49,8 +49,8 @@ class ViewController:
             if int(columns) < 7 or int(rows) < 7:
                 return ("Min columns:7","Min rows:7")
             else:
-                #valid max columns = width - right elements - left and right margins  || valid max height = height - top margin - bottom margin
-                return () if int(columns)<=(width - 370 - 40) // 20 and int(rows)<=(height - 20 - 80) // 20 else (f"Max Columns:{(width - 370 - 40) // 20}",f"Max rows:{(height - 20 - 80) // 20}")
+                #valid max columns = width - right elements - left and right margins  || valid max height = height - top margin - bottom margin - taskbar_height
+                return () if int(columns)<=(width - 370 - 40) // 20 and int(rows)<=(height - 20 - 40 - 80) // 20 else (f"Max Columns:{(width - 370 - 40) // 20}",f"Max rows:{(height - 20 - 40 - 80) // 20}")
         except ValueError:
             return ("Write only integers","Write only integers")
         except Exception as e:
@@ -169,10 +169,11 @@ class ViewController:
                 
                 if isinstance(return_value, list):   # The returned value is the list of solutions
                     generate_algorithm_time:int = abs(round(time.time() - start - (counter*0.100), 4)) # end - start - times that we use the delay time
+                    #generate_algorithm_time:int = abs(round(time.time() - start, 4)) # end - start - times that we use the delay time
                     view.clear_screen()
                     view.draw_maze()
                     view.draw_labels(f"{algorithm_name} time: {generate_algorithm_time}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-40) # Draw timer
-                    view.draw_labels(f"Number of iterations: {counter + len(return_value)}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20)
+                    view.draw_labels(f"Cells explored: {counter + len(return_value) + 1}", pygame.font.SysFont("Arial",15),view.color_black,20,self.maze_controller.get_px_size_maze()[1]-20)
                     # Draw the returned solutions
                     for solution in return_value: 
                         for cell in solution[1:-1]:
