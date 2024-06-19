@@ -271,7 +271,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
             self.view_controller.solve_maze(self)
         except Exception as e:
             log_exception(e)
