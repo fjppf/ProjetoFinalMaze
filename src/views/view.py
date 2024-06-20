@@ -292,7 +292,7 @@ class View:
             
             # Clear the screen
             self.clear_screen()
-            self.stop_visual_part()
+            self.view_controller.stop_visual_part()
         except Exception as e:
             log_exception(e)
     
@@ -361,13 +361,6 @@ class View:
             self.breadthBtn.enable()
             self.depthBtn.enable()
             self.asearchBtn.enable()
-            
-    # Method that calls the method in view_controller file that will stops the visual part of the program
-    def stop_visual_part(self) -> None:
-        try:
-            self.view_controller.stop_visual_part()
-        except Exception as e:
-            log_exception(e)
 
     
 
