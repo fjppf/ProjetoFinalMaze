@@ -1,3 +1,4 @@
+import platform
 import time
 import pygame
 import pygame_gui
@@ -12,7 +13,6 @@ class View:
     # Class constructor
     def __init__(self) -> None:
         try:
-            
             self.view_controller:ViewController = ViewController()
             
             # Variables for timers
@@ -25,7 +25,7 @@ class View:
             self.screen_height:int = screen_info.current_h # Screen height
                 
             # Set the screen to fullscreen with the obtained resolution
-            self.screen:pygame.display = pygame.display.set_mode((self.screen_width, self.screen_height-55))
+            self.screen:pygame.display = pygame.display.set_mode((self.screen_width, self.screen_height-55),depth=32)
             self.ui_manager:pygame_gui.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
             self.screen.fill((255, 255, 255))
             pygame.display.set_caption("Maze Simulator")
@@ -33,7 +33,12 @@ class View:
             pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
 
             # Desenhar os elementos na view
-            self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
+            #self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
+            os_name = platform.system()
+            if os_name == "Darwin":
+                self.text_font:pygame.font= pygame.font.SysFont("Arial",18) # Source of texts
+            elif os_name == "Windows":
+                self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
             self.title_font:pygame.font = pygame.font.SysFont("Arial Black",30) # Source of titles
             self.color_black:tuple=(0, 0, 0) # Color use in texts
             
@@ -47,8 +52,8 @@ class View:
             self.draw_labels("Number of rows :", self.text_font,self.color_black,self.screen_width-343,120)
             # Draw textbox to insert the desired number of lines
             self.txtNumbRowss:TextBox = TextBox(self.screen, self.screen_width-212, 115, 200, 35, fontSize=20, borderColour=(255, 0, 0), textColour=(0, 0, 0))
-            # Draw text in view
             
+            # Draw text in view
             self.draw_labels("Walls color :", self.text_font,self.color_black,self.screen_width-306,170)
             # Below we have initialized the initial colors of both the background and the walls of the maze, and we also have an explanation of the button parameters
             # The rectangles serve to show the user which color is chosen in the picker and which will be used to create the maze
@@ -355,6 +360,9 @@ class View:
             self.breadthBtn.enable()
             self.depthBtn.enable()
             self.asearchBtn.enable()
+            
+    def stop_visual_part(self)-> None:
+        self.view_controller.stop_visual_part()
 
     
 
