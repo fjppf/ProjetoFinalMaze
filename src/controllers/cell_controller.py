@@ -99,4 +99,6 @@ class CellController:
             return neighbors
         except Exception as e:
             log_exception(e)
+            
+            
     

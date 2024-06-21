@@ -328,34 +328,6 @@ class MazeController:
             log_exception(e)
         except Exception as e:
             log_exception(e)
-    
-    # # Method that will determine which previously visited cell has the lowest cost among the initial cell, the currently evaluated cell, and the final cell in order to obtain the best cell
-    # def choose_best_cell(self,cells:list['Cell'],index:int)->'Cell':
-    #     try:
-    #         optimal_cell:'Cell' = None
-    #         # We start the distance variable as high as possible
-    #         min_distance:float = float('inf')
-    #         # Get the coordinates of the final cell
-    #         end_cell_coords:int = (self.cell_controller.get_x(self.maze.get_end_cells()[index]) + 10,
-    #                         self.cell_controller.get_y(self.maze.get_end_cells()[index]) + 10)
-                
-    #         for cell in cells:           
-    #             # Get current cell coordinates
-    #             current_cell_coords = (self.cell_controller.get_x(cell) + 10,
-    #                                 self.cell_controller.get_y(cell) + 10)
-    #             # distance = distance between the final_cell and the checked cell
-    #             distance = math.sqrt((current_cell_coords[0] - end_cell_coords[0]) ** 2 +
-    #                                 (current_cell_coords[1] - end_cell_coords[1]) ** 2)
-                
-    #             # Check what is the minor total cost and save that value for future check, and save that cell
-    #             if distance < min_distance:
-    #                 min_distance = distance
-    #                 optimal_cell = cell    
-    #         return optimal_cell
-    #     except IndexError as e:
-    #         log_exception(e)
-    #     except Exception as e:
-    #         log_exception(e)
             
     # Method that will determine which previously visited cell has the lowest cost
     def choose_best_cell(self, cells: list['Cell'], index: int) -> 'Cell':
@@ -423,7 +395,7 @@ class MazeController:
             start_cell:'Cell' = self.get_start_cell()
             self.maze.set_current_cell(start_cell)
             self.cell_controller.set_cost(start_cell,0) # Set the cost of this cell
-            self.maze.add_paths([start_cell]) # Add to path list
+            self.maze.add_paths([]) # Add to path list
         except Exception as e:
             log_exception(e)
     
