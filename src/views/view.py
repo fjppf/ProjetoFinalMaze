@@ -25,7 +25,7 @@ class View:
             self.screen_height:int = screen_info.current_h # Screen height
                 
             # Set the screen to fullscreen with the obtained resolution
-            self.screen:pygame.display = pygame.display.set_mode((self.screen_width, self.screen_height-55),depth=32)
+            self.screen:pygame.display = pygame.display.set_mode((self.screen_width, self.screen_height-55))
             self.ui_manager:pygame_gui.ui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height-55))
             self.screen.fill((255, 255, 255))
             pygame.display.set_caption("Maze Simulator")
@@ -36,7 +36,7 @@ class View:
             #self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
             os_name = platform.system()
             if os_name == "Darwin":
-                self.text_font:pygame.font= pygame.font.SysFont("Arial",18) # Source of texts
+                self.text_font:pygame.font= pygame.font.SysFont("Arial",17) # Source of texts
             elif os_name == "Windows":
                 self.text_font:pygame.font= pygame.font.SysFont("Arial",20) # Source of texts
             self.title_font:pygame.font = pygame.font.SysFont("Arial Black",30) # Source of titles
