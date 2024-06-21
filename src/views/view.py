@@ -301,7 +301,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
             self.view_controller.save_maze(self.screen)
         except Exception as e:
             log_exception(e)
@@ -311,7 +310,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_flood,self.view_controller.second_fase_flood,self.view_controller.delete_flood,"Flood Fill Algorithm")
         except Exception as e:
             log_exception(e)
@@ -321,7 +319,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_breadth,self.view_controller.second_fase_breadth,self.view_controller.delete_breadth,"Breadth Algorithm")
         except Exception as e:
             log_exception(e)
@@ -331,7 +328,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_depth,self.view_controller.second_fase_depth,self.view_controller.delete_depth_A,"Depth Algorithm")
         except Exception as e:
             log_exception(e)  
@@ -341,8 +337,6 @@ class View:
         try:
             # Disable and enable certain buttons
             self.ena_dis_buttons()
-            
-            # Disable all other buttons except the secondary buttons and clear or save button. ########################
             self.view_controller.start_handle_algorithms(self,self.view_controller.first_fase_A,self.view_controller.second_fase_A,self.view_controller.delete_depth_A,"A* Algorithm")
         except Exception as e:
             log_exception(e)
