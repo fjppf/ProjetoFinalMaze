@@ -140,7 +140,6 @@ class MazeController:
         except Exception as e: # Generic error handling for any other exception type
             log_exception(e)
             return None
-    
         
     # Method that starts the Breadth Search algorithm
     def first_fase_breadth(self) -> None:
@@ -287,16 +286,13 @@ class MazeController:
             # if they do not exist, the list of possible paths will be returned to 0.
             if len(self.maze.get_end_cells())==0:
                 return self.maze.get_solutions()
-            
             current_cell:'Cell' = self.maze.get_current_cell()
             self.cell_controller.set_visited(current_cell,True) # Mark the current cell as visited
             neighbors:list['Cell'] = self.cell_controller.check_neighbors_algorithms(self.check_cell,current_cell) # Get the neighbors of the cell
-
             # Add the neighbors to the stack and remove the current one from it
             for neighbor in neighbors:
                 self.maze.add_stack(neighbor)
             self.maze.remove_stack(current_cell)
-            
             # We get the next_cell using the "choose_best_cell" method
             next_cell:'Cell' = self.choose_best_cell(self.maze.get_stack(),len(self.maze.get_solutions())) 
             
@@ -311,7 +307,6 @@ class MazeController:
                 self.clear_visited_attribute() 
                 self.maze.clear_depth_A_Flood_variables() 
                 return self.maze.get_solutions()
-            
             # Final verification to save the solution if necessary
             end_cells:list['Cell'] = self.maze.get_end_cells()
             if next_cell in end_cells:
@@ -435,9 +430,7 @@ class MazeController:
                     # Go through the list from the index where the final cell is located to index 0 
                     # and save the necessary cells along the way, checking the cost
                     for t in range(index_end_cell-1,0,-1):
-                        if path[t] is start_cell:
-                            solution.append(path[t])
-                        elif self.cell_controller.get_cost(path[t]) == self.cell_controller.get_cost(solution[-1])-1:
+                        if self.cell_controller.get_cost(path[t]) == self.cell_controller.get_cost(solution[-1])-1:
                             solution.append(path[t])
                     self.maze.add_solutions(solution)
                     

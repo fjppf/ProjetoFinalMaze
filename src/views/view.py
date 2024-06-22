@@ -211,7 +211,7 @@ class View:
         except Exception as e:
             log_exception(e)
         
-    # metodo que limpa o ecra
+    # Method to clean the screen
     def clear_screen(self) -> None:
         try:
             self.screen.fill((255,255,255),pygame.Rect(0, 0, self.screen_width-370, self.screen_height))

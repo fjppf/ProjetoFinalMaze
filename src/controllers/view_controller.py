@@ -139,7 +139,6 @@ class ViewController:
             self.stop_handle_algorithms.clear()
             self.handle_algorithms_thread = threading.Thread(target=self.handle_algorithms,args=(view, first_phase_method, second_phase_method,delete_method, algorithm_name))
             self.handle_algorithms_thread.start()
-            
 
     # Method that we use to iterate in Breadth and Depth algorithms
     def handle_algorithms(self,view:'view', first_phase_method:callable, second_phase_method:callable,delete_method:callable, algorithm_name:str) -> None:
