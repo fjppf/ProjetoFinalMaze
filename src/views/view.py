@@ -30,7 +30,7 @@ class View:
             self.screen.fill((255, 255, 255))
             pygame.display.set_caption("Maze Simulator")
             # Define the icon for the window
-            pygame.display.set_icon(pygame.image.load("C:/Users/diogo/Desktop/ProjetoFinalMaze/src/images/icon.png"))
+            pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
 
             # Desenhar os elementos na view
             os_name = platform.system()
