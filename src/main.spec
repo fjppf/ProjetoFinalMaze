@@ -29,7 +29,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='main',
+    name='Simulador de Rotas em Labirintos',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

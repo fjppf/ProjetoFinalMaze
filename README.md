@@ -5,7 +5,7 @@ Este projeto consiste num simulador de rotas em labirintos, onde utilizando dete
 O projeto tem como propósito ver como diversos algoritmos utilizam as suas próprias maneiras para procurar os caminhos existentes no labirinto criado também pelo utilizador.
 
 ## Instalação
-Devido a este projeto utilizar diversas dependências e o prazo final ser iminente, o projeto não inclui um executável. No entanto, abaixo é indicado o passo a passo para executar a aplicação em qualquer máquina.
+Necessita somente de 
 
 ### Requisitos do sistema
 - Sistema Operativo: Windows, macOS, Linux

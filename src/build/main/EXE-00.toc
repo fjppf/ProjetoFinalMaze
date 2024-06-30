@@ -1,4 +1,5 @@
-('C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\main.exe',
+('C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\Simulador de '
+ 'Rotas em Labirintos.exe',
  False,
  False,
  True,
@@ -29,7 +30,8 @@
  None,
  None,
  None,
- 'C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\main.pkg',
+ 'C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\Simulador de '
+ 'Rotas em Labirintos.pkg',
  [('pyi-contents-directory _internal', '', 'OPTION'),
   ('PYZ-00.pyz',
    'C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\PYZ-00.pyz',
@@ -67,7 +69,7 @@
  [],
  False,
  False,
- 1719758198,
+ 1719758592,
  [('runw.exe',
    'C:\\Python312\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw.exe',
    'EXECUTABLE')],

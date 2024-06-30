@@ -1,5 +1,6 @@
-([('main.exe',
-   'C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\main.exe',
+([('Simulador de Rotas em Labirintos.exe',
+   'C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\Simulador '
+   'de Rotas em Labirintos.exe',
    'EXECUTABLE'),
   ('python312.dll', 'C:\\Python312\\python312.dll', 'BINARY'),
   ('zlib1.dll',
