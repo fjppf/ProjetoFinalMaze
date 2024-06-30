@@ -15,6 +15,7 @@ Necessita somente de realizar o download da pasta do simulador e abrir o execut�
 https://alumniual-my.sharepoint.com/:f:/g/personal/30008890_students_ual_pt/EijOSUgs9AFOmqEFBEE5510Bx64ANdybxphDFLqWi35yTQ?e=LEkNtI
 
 **2ºPasso** – Descompactar o zip para uma localização à sua escolha
+
 **3ºPasso** – Abrir a pasta descompactada e clicar duas vezes no ficheiro “Simulador de Rotas em Labirintos.exe” para correr a aplicação.
 
 
