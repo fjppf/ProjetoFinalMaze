@@ -1,9 +1,9 @@
+import os
 import platform
 import time
 import pygame
 import pygame_gui
 import pygame_gui.ui_manager
-from typing import Union
 from pygame_widgets.button import Button
 from pygame_widgets.textbox import TextBox
 from controllers.view_controller import ViewController
@@ -30,7 +30,7 @@ class View:
             self.screen.fill((255, 255, 255))
             pygame.display.set_caption("Maze Simulator")
             # Define the icon for the window
-            pygame.display.set_icon(pygame.image.load("src/images/icon.png"))
+            pygame.display.set_icon(pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "icon.png")))
 
             # Desenhar os elementos na view
             os_name = platform.system()
@@ -59,7 +59,7 @@ class View:
             self.current_color_wls:pygame.color = pygame.Color(255,140,0)
             # (screen where the button will be drawn, button x position, button y position, button width, button height, button radius, button text, text font size,
             # margin around text, button color when inactive, button color when mouse hovers over, button color when clicked, function to be called when button is clicked, button background image) 
-            pickColor_img:pygame.image = pygame.image.load("src/images/pickColor.png").convert()
+            pickColor_img:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "pickColor.png")).convert()
             self.pick_color_btn_wls = Button(self.screen, self.screen_width-192, 165, 100, 35, radius=0, onClick=self.pick_color_btn_wls_click, image=pygame.transform.scale(pickColor_img,(100,35)))
             self.rect_wls:pygame.rect = pygame.draw.rect(self.screen, self.current_color_wls, (self.screen_width-57, 165, 35, 35))
             # Draw text in view
@@ -70,32 +70,32 @@ class View:
             
             # Design of the 4 main simulator buttons (Create, Solve, Clear, Save)
             # The background of each button will be an image created by us
-            create_Btn_img:pygame.image = pygame.image.load("src/images/botaocreate.png").convert()
+            create_Btn_img:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "botaocreate.png")).convert()
             self.createBtn = Button(self.screen, self.screen_width-370, 285, 175, 60, radius=0, onClick=self.create_btn_click, image=pygame.transform.scale(create_Btn_img,(175,60)))
             
-            solve_Btn_img:pygame.image = pygame.image.load("src/images/botaosolve.png").convert()   
+            solve_Btn_img:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "botaosolve.png")).convert()   
             self.solveBtn = Button(self.screen, self.screen_width-185, 285, 175, 60, radius=0, onClick=self.solve_btn_click, image=pygame.transform.scale(solve_Btn_img,(175,60)))
             
-            clear_Btn_img:pygame.image = pygame.image.load("src/images/botaoclear.png").convert()   
+            clear_Btn_img:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "botaoclear.png")).convert()   
             self.clearBtn = Button(self.screen, self.screen_width-370, 365, 175, 60, radius=0, onClick=self.clear_btn_click, image=pygame.transform.scale(clear_Btn_img,(175,60)))
             
-            save_Btn_img:pygame.image = pygame.image.load("src/images/botaosave.png").convert()   
+            save_Btn_img:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "botaosave.png")).convert()   
             self.saveBtn = Button(self.screen, self.screen_width-185, 365, 175, 60, radius=0, onClick=self.save_btn_click, image=pygame.transform.scale(save_Btn_img,(175,60)))
             
             # Draw text in view
             self.draw_labels("Options", self.title_font,self.color_black,self.screen_width-248,455)
             # Design of the 4 secondary buttons whose objectives are to let the user choose which algorithm they want to solve the maze with
-            # Each button is named after the function that can be used for resolution (Flood Fill, Breadth, Depth, A*)
-            fsBtn:pygame.image = pygame.image.load("src/images/floodfillsearch.png").convert()  
+            # Each button is named after the function that can be used for resolution (Flood Fill, Breadth, Depth, A*) 
+            fsBtn:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "floodfillsearch.png")).convert()  
             self.fsearchBtn:Button = Button(self.screen, self.screen_width-370, 508, 175, 60, radius=50, onClick=self.fsearchBtn_click, image=pygame.transform.scale(fsBtn,(175,60)))
 
-            brBtn:pygame.image = pygame.image.load("src/images/breadthSearch.png").convert()  
+            brBtn:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "breadthSearch.png")).convert()  
             self.breadthBtn:Button = Button(self.screen, self.screen_width-185, 508, 175, 60, radius=50, onClick=self.breadthBtn_click, image=pygame.transform.scale(brBtn,(175,60)))
 
-            daBtn:pygame.image = pygame.image.load("src/images/depthSearch.png").convert()  
+            daBtn:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "depthSearch.png")).convert()  
             self.depthBtn:Button = Button(self.screen, self.screen_width-370, 588, 175, 60, radius=50, onClick=self.depthBtn_click, image=pygame.transform.scale(daBtn,(175,60)))
 
-            asBtn:pygame.image = pygame.image.load("src/images/ASearch.png").convert()  
+            asBtn:pygame.image = pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "ASearch.png")).convert()  
             self.asearchBtn:Button = Button(self.screen, self.screen_width-185, 588, 175, 60, radius=50, onClick=self.asearchBtn_click, image=pygame.transform.scale(asBtn,(175,60)))
             
             # Enable and Disable certain buttons
