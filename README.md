@@ -63,31 +63,31 @@ Seguindo estes passos, conseguirás instalar e executar qualquer projeto localiz
 ## Uso
 Para o utilizador conseguir visualizar e realizar todos os propósitos pretendidos por este projeto, a aplicação contém várias funcionalidades. As funcionalidades mais importantes são as que foram chamadas de gerais e estas são: Inserir linhas e colunas, Criar, Resolver, Apagar e Salvar. 
 
-Insert Rows and columns- Esta funcionalidade permite que o utilizador insira o número que pretende de linhas e colunas para posteriormente a funcionalidade criar, utilize estes valores numéricos passados pelo utilizador para realizar a sua função. Estes valores são passados de forma interativa, ou seja, o utilizador tem dois elementos visuais no ecrã devidamente etiquetados onde este sabe qual valor é para colocar em cada um.
+**Insert Rows and columns-** Esta funcionalidade permite que o utilizador insira o número que pretende de linhas e colunas para posteriormente a funcionalidade criar, utilize estes valores numéricos passados pelo utilizador para realizar a sua função. Estes valores são passados de forma interativa, ou seja, o utilizador tem dois elementos visuais no ecrã devidamente etiquetados onde este sabe qual valor é para colocar em cada um.
 
-Create- Esta permite que o utilizador crie um labirinto no ecrã da aplicação, com os valores passados pela funcionalidade “Inserir linhas e colunas”. Esta funcionalidade verifica também esses valores inseridos, pois consoante o tamanho do utilizador o valor máximo permitido de linhas e colunas pode variar.
+**Create-** Esta permite que o utilizador crie um labirinto no ecrã da aplicação, com os valores passados pela funcionalidade “Inserir linhas e colunas”. Esta funcionalidade verifica também esses valores inseridos, pois consoante o tamanho do utilizador o valor máximo permitido de linhas e colunas pode variar.
 
-Solve- O utilizador tem também acesso à funcionalidade “Resolver” que permite que o mesmo, como o próprio nome indica, resolva o labirinto que criou anteriormente. O meio de resolução do labirinto altera consoante o tamanho do mesmo.
+**Solve-** O utilizador tem também acesso à funcionalidade “Resolver” que permite que o mesmo, como o próprio nome indica, resolva o labirinto que criou anteriormente. O meio de resolução do labirinto altera consoante o tamanho do mesmo.
 
-Clear- O utilizador pode também decidir apagar o labirinto que criou a qualquer momento incluindo enquanto um algoritmo se encontra a resolver o mesmo.
+**Clear-** O utilizador pode também decidir apagar o labirinto que criou a qualquer momento incluindo enquanto um algoritmo se encontra a resolver o mesmo.
 
-Save- Para uma futura análise ou meramente por o utilizador quiser guardar, o mesmo tem então à sua disposição a funcionalidade “Guardar”.
+**Save-** Para uma futura análise ou meramente por o utilizador quiser guardar, o mesmo tem então à sua disposição a funcionalidade “Guardar”.
 
 Existem ainda outras funcionalidades, nomeadamente funcionalidades visuais e algorítmicas. As funcionalidades visuais têm como objetivo permitir que o utilizador personalize a aplicação ao seu gosto, e consistem em duas funcionalidades específicas.
 
-Pick color walls- Esta funcionalidade permite, através de uma janela secundária que se abre ao clicar no botão com o texto "Pick color" ao lado do texto "Walls color:", escolher a cor desejada para as paredes do labirinto.
+**Pick color walls-** Esta funcionalidade permite, através de uma janela secundária que se abre ao clicar no botão com o texto "Pick color" ao lado do texto "Walls color:", escolher a cor desejada para as paredes do labirinto.
 
-Pick color backgorund- Esta funcionalidade, à semelhança da anterior, permite que o utilizador selecione uma cor, mas desta vez para o fundo do labirinto em vez de para as paredes.
+**Pick color backgorund-** Esta funcionalidade, à semelhança da anterior, permite que o utilizador selecione uma cor, mas desta vez para o fundo do labirinto em vez de para as paredes.
 
 Por último, existem as funcionalidades algorítmicas, que são as que permitem ao utilizador escolher qual o algoritmo com que pretendem resolver o labirinto que acabaram de criar.
 
-Flood Fill- Esta funcionalidade é precisamente o algoritmo de procura Flood Fill. Este algoritmo resolve o labirinto explorando em profundidade, utilizando backtracking para percorrer todas as casas (células) existentes. No final, encontra o melhor caminho possível, caso exista, com base no custo de cada célula.
+**Flood Fill-** Esta funcionalidade é precisamente o algoritmo de procura Flood Fill. Este algoritmo resolve o labirinto explorando em profundidade, utilizando backtracking para percorrer todas as casas (células) existentes. No final, encontra o melhor caminho possível, caso exista, com base no custo de cada célula.
 
-Breadth- Este explora todo o labirinto em largura até encontrar a(s) casa(s) final(is), caso existam. Devido a esta exploração em largura, garante sempre que encontra o menor caminho possível entre a casa inicial e a casa final, se existir uma casa final.
+**Breadth-** Este explora todo o labirinto em largura até encontrar a(s) casa(s) final(is), caso existam. Devido a esta exploração em largura, garante sempre que encontra o menor caminho possível entre a casa inicial e a casa final, se existir uma casa final.
 
-Depth- Esta funcionalidade permite que o utilizador explore todo o labirinto em profundidade até encontrar a(s) casa(s) final(is). Utiliza backtracking nos casos em que encontra um beco sem saída, retrocedendo para a última interseção disponível até encontrar uma que ainda tenha vizinhos não visitados.
+**Depth-** Esta funcionalidade permite que o utilizador explore todo o labirinto em profundidade até encontrar a(s) casa(s) final(is). Utiliza backtracking nos casos em que encontra um beco sem saída, retrocedendo para a última interseção disponível até encontrar uma que ainda tenha vizinhos não visitados.
 
-A* Search- Esta funcionalidade utiliza precisamente o algoritmo “A* Search” para explorar todo o labirinto de forma a encontrar o caminho mais curto entre a casa inicial e a(s) casa(s) final(is), caso existam. Para isto este utiliza uma função heurística para avaliar o custo total do caminho.
+**A* Search-** Esta funcionalidade utiliza precisamente o algoritmo “A* Search” para explorar todo o labirinto de forma a encontrar o caminho mais curto entre a casa inicial e a(s) casa(s) final(is), caso existam. Para isto este utiliza uma função heurística para avaliar o custo total do caminho.
 
 ## Exemplo de utilização
 1.	Iniciar a aplicação seguindo os passos descritos na instalação.
