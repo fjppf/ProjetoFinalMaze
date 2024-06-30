@@ -1,29 +1,14 @@
 # Simulador de Aprendizagem de Rotas em Labirintos
 
 ## Descrição
-Este projeto consiste num simulador de rotas em labirintos, onde utilizando determinados algoritmos pré-criados pelos desenvolvedores da aplicação o usuário irá conseguir procurar o caminho desde a casa final até às casas finais caso essa ou essas existam.
+Este projeto consiste num simulador de rotas em labirintos, onde utilizando determinados algoritmos pré-criados pelos desenvolvedores da aplicação o usuário irá conseguir procurar o caminho desde a casa inicial até às casas finais caso essa ou essas existam.
 O projeto tem como propósito ver como diversos algoritmos utilizam as suas próprias maneiras para procurar os caminhos existentes no labirinto criado também pelo utilizador.
 
 ## Instalação
-Necessita somente de 
+Necessita somente de realizar o download da pasta do simulador e abrir o executável.
 
 ### Requisitos do sistema
 - Sistema Operativo: Windows, macOS, Linux
-- Python 3.12.0
-- Git
-
-### Dependências
-- Pygame
-- Pygame_widgets
-- Pygame_gui
-- threading
-- random
-- os
-- time
-- typing
-- math
-- traceback
-- platform
 
 ### Passos para a instalação
 **1ºPasso** – Realizar o download da pasta que se encontra no link: 
@@ -34,9 +19,6 @@ https://alumniual-my.sharepoint.com/:f:/g/personal/30008890_students_ual_pt/EijO
 
 
 Nota: Sempre que aparecer um aviso de segurança por parte do Windows clicar sempre em permitir. 
-
-
-   
 
 ## Uso
 Para o utilizador conseguir visualizar e realizar todos os propósitos pretendidos por este projeto, a aplicação contém várias funcionalidades. As funcionalidades mais importantes são as que foram chamadas de gerais e estas são: Inserir linhas e colunas, Criar, Resolver, Apagar e Salvar. 
