@@ -48,7 +48,7 @@ Por último, existem as funcionalidades algorítmicas, que são as que permitem 
 
 **Depth-** Esta funcionalidade permite que o utilizador explore todo o labirinto em profundidade até encontrar a(s) casa(s) final(is). Utiliza backtracking nos casos em que encontra um beco sem saída, retrocedendo para a última interseção disponível até encontrar uma que ainda tenha vizinhos não visitados.
 
-**A* Search-** Esta funcionalidade utiliza precisamente o algoritmo “A* Search” para explorar todo o labirinto de forma a encontrar o caminho mais curto entre a casa inicial e a(s) casa(s) final(is), caso existam. Para isto este utiliza uma função heurística para avaliar o custo total do caminho.
+**A* Search-*** Esta funcionalidade utiliza precisamente o algoritmo “A* Search” para explorar todo o labirinto de forma a encontrar o caminho mais curto entre a casa inicial e a(s) casa(s) final(is), caso existam. Para isto este utiliza uma função heurística para avaliar o custo total do caminho.
 
 ## Exemplo de utilização
 1.	Iniciar a aplicação seguindo os passos descritos na instalação.
@@ -60,7 +60,7 @@ Por último, existem as funcionalidades algorítmicas, que são as que permitem 
 7.	Clicar no botão "Limpar" para apagar o labirinto e poder criar outro.
 
 ## Licença
-Este projeto foi desenvolvido como parte de um projeto escolar e não está licenciado para uso ou distribuição pública. Para qualquer dúvida ou pedido de utilização, por favor, entre em contacto com o autor ou a instituição responsável.
+Este projeto foi desenvolvido como parte de um projeto escolar e não está licenciado para uso ou distribuição pública. Para qualquer dúvida ou pedido de utilização, por favor, entre em contacto com um dos autores do mesmo.
 
 ## Créditos
 Este projeto não teria sido possível sem a colaboração e o apoio de várias pessoas. Gostaríamos de agradecer a todos os que contribuíram para o seu sucesso: 
