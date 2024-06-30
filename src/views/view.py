@@ -32,7 +32,7 @@ class View:
             # Define the icon for the window
             pygame.display.set_icon(pygame.image.load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "images", "icon.png")))
 
-            # Desenhar os elementos na view
+            # Draw the elements in the view
             os_name = platform.system()
             if os_name == "Darwin":
                 self.text_font:pygame.font= pygame.font.SysFont("Arial",17) # Source of texts

@@ -2,7 +2,7 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['/'],  # Caminho para o diretÃ³rio raiz do seu projeto
+    pathex=['/'],  
     binaries=[],
     datas=[
         ('controllers', 'controllers'),
@@ -10,8 +10,8 @@ a = Analysis(
         ('models', 'models'),
         ('utils', 'utils'),
         ('images', 'images'),  
-        ('C:/Python312/Lib/site-packages/pygame_gui', 'pygame_gui'),  # Inclui a pasta pygame_gui completa
-        ('C:/Python312/Lib/site-packages/pygame_widgets', 'pygame_widgets'),  # Inclui a pasta pygame_widgets completa
+        ('C:/Python312/Lib/site-packages/pygame_gui', 'pygame_gui'),  
+        ('C:/Python312/Lib/site-packages/pygame_widgets', 'pygame_widgets'),  
     ],
     hiddenimports = ['pygame', 'pygame_widgets', 'pygame_gui'],
     hookspath=[],
@@ -48,6 +48,7 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='ProjetoFinalMaze',
+    name='Simulador de Rotas em Labirintos',
     icon='images/icon.ico',
 )
+
