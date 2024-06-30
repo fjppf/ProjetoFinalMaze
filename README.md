@@ -26,38 +26,16 @@ Necessita somente de
 - platform
 
 ### Passos para a instalação
-1.	Instalar o Git
-    1.1.	Acesse o site oficial do Git: https://git-scm.com/
-    1.2.	Clique em "Download" e siga as instruções de instalação para o seu sistema operacional (Windows, macOS ou Linux).
-    1.3.	Após a instalação, abra um terminal e execute o comando git --version para verificar se o Git foi instalado corretamente.
-2.	Instalar o Visual Studio Code
-    2.1.	Acesse o site oficial do Visual Studio Code: https://code.visualstudio.com/
-    2.2.	Clique no botão "Download" e siga as instruções de instalação para o seu sistema operacional (Windows, macOS ou Linux).
-3.	Instalar o Python
-    3.1.	Acesse o site oficial do Python: https://www.python.org/
-    3.2.	Clique em "Downloads" e escolha a versão adequada para o seu sistema operacional.
-    3.3.	Durante a instalação, certifique-se de marcar a opção "Add Python to PATH".
-4.	Clonar o Repositório do GitHub
-    4.1.	Abra o Visual Studio Code.
-    4.2.	Pressione Ctrl + ç no Windows ou Cmd + ç no macOS, para abrir o terminal
-    4.3.	Utilize o comando “cd” para se dirigir para o local onde pretende clonar o repositório
-            “cd caminho/para/o/diretório/de/destino”
-    4.4.	Digite o “Git clone” seguido do URL do github do projeto para clonar o mesmo para o diretório.
-            “Git clone https://github.com/fjppf/ProjetoFinalMaze.git “
-5.	Abrir o Projeto no Visual Studio Code
-    5.1.	No Visual Studio Code, clique em "File" > "Open Folder".
-    5.2.	Navegue até à pasta onde o repositório foi clonado e selecione-a.
-    5.3.	O Visual Studio Code irá abrir a pasta do projeto.
-6.	Instalar as Dependências do Projeto
-    6.1.	Abra um terminal integrado no Visual Studio Code (pressione Crtl + ç ou Cmd + ç)
-    6.2.	Certifique-se de que o terminal está na raiz do projeto (onde está localizado o arquivo requirements.txt).
-    6.3.	Execute o seguinte comando para instalar as bibliotecas necessárias:
-            “pip install -r requirements.txt”
-            Este comando irá ler o arquivo requirements.txt e instalar todas as dependências listadas.
-7.	Executar a Aplicação
-    7.1.	Por fim, pode agora fazer duplo clique no ficheiro main.py e, em seguida, clicar duas vezes na seta que aparece no canto superior direito do Visual Studio Code.
+**1ºPasso** – Realizar o download da pasta que se encontra no link: 
+https://alumniual-my.sharepoint.com/:f:/g/personal/30008890_students_ual_pt/EijOSUgs9AFOmqEFBEE5510Bx64ANdybxphDFLqWi35yTQ?e=LEkNtI
 
-Seguindo estes passos, conseguirás instalar e executar qualquer projeto localizado no GitHub. Se encontrares problemas, consulta a documentação do projeto ou os arquivos README.md fornecidos pelo autor do repositório.
+**2ºPasso** – Descompactar o zip para uma localização à sua escolha
+**3ºPasso** – Abrir a pasta descompactada e clicar duas vezes no ficheiro “Simulador de Rotas em Labirintos.exe” para correr a aplicação.
+
+
+Nota: Sempre que aparecer um aviso de segurança por parte do Windows clicar sempre em permitir. 
+
+
    
 
 ## Uso
