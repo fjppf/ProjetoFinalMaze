@@ -69,10 +69,10 @@ Este projeto não teria sido possível sem a colaboração e o apoio de várias 
 - **Diogo Almeida** 
 - **Guilherme Botelho** 
 - **Francisco Furtado** 
-- **Francisco Furtado** 
+- **Filipe Ferreira** 
 
 ### Agradecimentos Especiais 
-- **Professor Doutor Adrian-Horia Dediu** - Orientação e apoio ao longo do projeto 
+- **Professor Doutor Adrian-Horia Dediu e restantes orientadores** - Orientação e apoio ao longo do projeto 
 - **Colegas da Turma** - Feedback e sugestões valiosas 
 
 A todos, os nossos sinceros agradecimentos pelos contributos e dedicação.
