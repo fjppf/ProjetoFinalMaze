@@ -1,7 +1,7 @@
 # Simulador de Aprendizagem de Rotas em Labirintos
 
 ## Descrição
-Este projeto consiste num simulador de rotas em labirintos, onde utilizando determinados algoritmos pré-criados pelos desenvolvedores da aplicação o usuário irá conseguir procurar o caminho desde a casa inicial até às casas finais caso essa ou essas existam.
+Este projeto consiste num simulador de aprendizagem de rotas em labirintos, onde utilizando determinados algoritmos pré-criados pelos desenvolvedores da aplicação o usuário irá conseguir procurar o caminho desde a casa inicial até às casas finais caso essa ou essas existam.
 O projeto tem como propósito ver como diversos algoritmos utilizam as suas próprias maneiras para procurar os caminhos existentes no labirinto criado também pelo utilizador.
 
 ## Instalação
