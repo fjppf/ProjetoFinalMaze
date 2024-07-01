@@ -1,5 +1,5 @@
 ('C:\\Users\\diogo\\Desktop\\ProjetoFinalMaze\\src\\build\\main\\Simulador de '
- 'Rotas em Labirintos.pkg',
+ 'Aprendizagem de Rotas em Labirintos.pkg',
  {'BINARY': True,
   'DATA': True,
   'EXECUTABLE': True,
